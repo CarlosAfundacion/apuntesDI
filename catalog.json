@@ -1,28 +1,28 @@
 [
   {
-    "name" : "Corgi",
-    "description" : "Un perro pequeño",
-    "image_url" : "https://raw.githubusercontent.com/Mario7423/Desarrollo-de-Interfaces/main/API-REST/Corgii-edited.jpg"
+    "name" : "Boston Dynamics ",
+    "description" : "Primera empresa en acercarse a la visión que tenemos de los robots de ciencia ficción",
+    "image_url" : "https://raw.githubusercontent.com/CarlosAfundacion/imagenes/main/imagen1.jpg"
   },
   {
-    "name" : "Ovejero",
-    "description" : "Un perro peludo",
-    "image_url" : "https://raw.githubusercontent.com/Mario7423/Desarrollo-de-Interfaces/main/API-REST/Ovejero-edited.jpg"
+    "name" : "C3PO R2D"",
+    "description" : "La pareja de robots más famosa de las películas de ciencia ficción",
+    "image_url" : "https://raw.githubusercontent.com/CarlosAfundacion/imagenes/main/imagen2.jpg"
   },
   {
-    "name" : "Pastor Alemán",
-    "description" : "Un perro bonito",
-    "image_url" : "https://raw.githubusercontent.com/Mario7423/Desarrollo-de-Interfaces/main/API-REST/Pastor-Alemán-edited.jpg"
+    "name" : "Robot cadena de producción",
+    "description" : "El primer campo que utilizó la robótica para automatizar trabajos",
+    "image_url" : "https://raw.githubusercontent.com/CarlosAfundacion/imagenes/main/imagen3.jpeg"
   },
   {
-    "name" : "Pug",
-    "description" : "Un perro enano",
-    "image_url" : "https://raw.githubusercontent.com/Mario7423/Desarrollo-de-Interfaces/main/API-REST/Pug-edited.jpg"
+    "name" : "Dibujo de robot",
+    "description" : "Ejemplo de robot humanoide prototípico en formato dibujo",
+    "image_url" : "https://raw.githubusercontent.com/CarlosAfundacion/imagenes/main/imagen4.jpg"
   },
   {
-    "name" : "Boyero de Verna",
-    "description" : "Un perro fiel",
-    "image_url" : "https://raw.githubusercontent.com/Mario7423/Desarrollo-de-Interfaces/main/API-REST/Boyero-de-Verna-edited.jpg"
+    "name" : "Dibujo de robot con casco",
+    "description" : "Otro ejemplo de robot humanoide prototípico, esta vez con un casco de obra",
+    "image_url" : "https://raw.githubusercontent.com/CarlosAfundacion/imagenes/main/imagen5.jpg"
   }
 ]
     
