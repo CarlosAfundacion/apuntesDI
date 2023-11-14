@@ -1,0 +1,28 @@
+[
+  {
+    "name" : "Corgi",
+    "description" : "Un perro pequeño",
+    "image_url" : "https://raw.githubusercontent.com/Mario7423/Desarrollo-de-Interfaces/main/API-REST/Corgii-edited.jpg"
+  },
+  {
+    "name" : "Ovejero",
+    "description" : "Un perro peludo",
+    "image_url" : "https://raw.githubusercontent.com/Mario7423/Desarrollo-de-Interfaces/main/API-REST/Ovejero-edited.jpg"
+  },
+  {
+    "name" : "Pastor Alemán",
+    "description" : "Un perro bonito",
+    "image_url" : "https://raw.githubusercontent.com/Mario7423/Desarrollo-de-Interfaces/main/API-REST/Pastor-Alemán-edited.jpg"
+  },
+  {
+    "name" : "Pug",
+    "description" : "Un perro enano",
+    "image_url" : "https://raw.githubusercontent.com/Mario7423/Desarrollo-de-Interfaces/main/API-REST/Pug-edited.jpg"
+  },
+  {
+    "name" : "Boyero de Verna",
+    "description" : "Un perro fiel",
+    "image_url" : "https://raw.githubusercontent.com/Mario7423/Desarrollo-de-Interfaces/main/API-REST/Boyero-de-Verna-edited.jpg"
+  }
+]
+    
