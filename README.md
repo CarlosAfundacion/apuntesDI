@@ -2,33 +2,32 @@
 
 ## Índice
 
-1. [Manipulación de Archivos en Python](#1-manipulación-de-archivos-en-python)
-2. [Uso de Excepciones en Python](#2-uso-de-excepciones-en-python)
-3. [Tkinter: Ampliación de Conceptos](#3-tkinter-ampliación-de-conceptos)
-    - [Eventos y Binding (Teclado y Ratón) en Tkinter](#eventos-y-binding-teclado-y-ratón-en-tkinter)
-    - [Manejo de Ventanas Emergentes (Toplevel) en Tkinter](#manejo-de-ventanas-emergentes-toplevel-en-tkinter)
+1. [Manipulación de archivos en Python](#1-manipulación-de-archivos-en-python)
+2. [Uso de excepciones en Python](#2-uso-de-excepciones-en-python)
+3. [Tkinter: Ampliación de conceptos](#3-tkinter-ampliación-de-conceptos)
+    - [Eventos y Binding (Teclado y ratón) en Tkinter](#eventos-y-binding-teclado-y-ratón-en-tkinter)
+    - [Manejo de ventanas emergentes (Toplevel) en Tkinter](#manejo-de-ventanas-emergentes-toplevel-en-tkinter)
         - [grab_set()](#grab_set)
         - [winfo_screenwidth y winfo_screenheight](#winfo_screenwidth-y-winfo_screenheight)
-        - [winfo_width](#winfo_width)
-        - [winfo_height](#winfo_height)
+        - [winfo_width y winfo_height](#winfo_width-y-winfo_height)
         - [update_idletasks](#update_idletasks)
         - [winfo_reqwidth y winfo_reqheight](#winfo_reqwidth-y-winfo_reqheight)
     - [Uso de `quit` y `destroy` en Tkinter](#uso-de-quit-y-destroy-en-tkinter)
-4. [Funciones Lambda en Python y su Aplicación en Tkinter](#4-funciones-lambda-en-python-y-su-aplicación-en-tkinter)
-5. [Gestión de Imágenes en Tkinter](#5-gestión-de-imágenes-en-tkinter)
+4. [Funciones lambda en Python y su aplicación en Tkinter](#4-funciones-lambda-en-python-y-su-aplicación-en-tkinter)
+5. [Gestión de imágenes en Tkinter](#5-gestión-de-imágenes-en-tkinter)
     - [Uso de Pillow](#uso-de-pillow)
-    - [Carga de Imágenes desde GitHub](#carga-de-imágenes-desde-github)
-    - [Uso de Hilos](#uso-de-hilos)
+    - [Carga de imágenes desde GitHub](#carga-de-imágenes-desde-github)
+    - [Uso de hilos](#uso-de-hilos)
 6. [Modelo Vista Controlador (MVC) en Tkinter](#6-modelo-vista-controlador-mvc-en-tkinter)
 
 ---
 
 
-## 1. Manipulación de Archivos en Python
+## 1. Manipulación de archivos en Python
 
 Python ofrece múltiples formas de manejar archivos, permitiendo leer, escribir y manipular datos de manera eficiente.
 
-### Apertura y Cierre de Archivos
+### Apertura y cierre de archivos
 
 Para trabajar con archivos, primero se deben abrir utilizando la función `open()`, y es una buena práctica cerrarlos después de su uso con `close()` o utilizando el contexto `with`.
 
@@ -44,7 +43,7 @@ print(contenido)
 archivo.close()
 ```
 
-**Usando Contexto `with`:**
+**Usando contexto `with`:**
 
 ```python
 with open('datos.txt', 'r') as archivo:
@@ -53,7 +52,7 @@ with open('datos.txt', 'r') as archivo:
 # El archivo se cierra automáticamente al salir del bloque
 ```
 
-### Lectura de Archivos
+### Lectura de archivos
 
 Existen varias formas de leer archivos:
 
@@ -69,7 +68,7 @@ with open('datos.txt', 'r') as archivo:
         print(linea.strip())
 ```
 
-### Escritura de Archivos
+### Escritura de archivos
 
 Para escribir en un archivo, se puede abrir en modo escritura `'w'` (sobrescribe) o modo append `'a'` (añade al final).
 
@@ -91,7 +90,7 @@ with open('salida.txt', 'w') as archivo:
 | `'b'` | Modo binario. Se puede combinar con otros modos, e.g., `'rb'`. |
 | `'+'` | Lectura y escritura. |
 
-### Manejo de Archivos CSV
+### Manejo de archivos CSV
 
 Python tiene un módulo dedicado para manejar archivos CSV.
 
@@ -124,11 +123,11 @@ with open('salida.csv', 'w', newline='') as archivo:
 
 ---
 
-## 2. Uso de Excepciones en Python
+## 2. Uso de excepciones en Python
 
 Las excepciones permiten manejar errores de manera controlada, evitando que el programa se detenga abruptamente.
 
-### Estructura Básica de Manejo de Excepciones
+### Estructura básica de manejo de excepciones
 
 ```python
 try:
@@ -140,14 +139,14 @@ finally:
     print("Este bloque se ejecuta siempre.")
 ```
 
-### Tipos Comunes de Excepciones
+### Tipos comunes de excepciones
 
 - `ZeroDivisionError`: División por cero.
 - `FileNotFoundError`: Archivo no encontrado.
 - `ValueError`: Valor incorrecto.
 - `TypeError`: Tipo de dato incorrecto.
 
-### Capturar Múltiples Excepciones
+### Capturar múltiples excepciones
 
 ```python
 try:
@@ -160,7 +159,7 @@ except ValueError:
     print("Error: No has introducido un número válido.")
 ```
 
-### Usar `else` en Manejo de Excepciones
+### Usar `else` en manejo de excepciones
 
 El bloque `else` se ejecuta si no se produjo ninguna excepción.
 
@@ -176,7 +175,7 @@ else:
     print(f"El resultado es {resultado}")
 ```
 
-### Crear Excepciones Personalizadas
+### Crear excepciones personalizadas
 
 Se pueden definir excepciones propias heredando de `Exception`.
 
@@ -196,15 +195,15 @@ except MiError as e:
 
 ---
 
-## 3. Tkinter: Ampliación de Conceptos
+## 3. Tkinter: Ampliación de conceptos
 
 Tkinter es la biblioteca estándar de Python para crear interfaces gráficas de usuario (GUI).
 
-### Eventos y Binding (Teclado y Ratón) en Tkinter
+### Eventos y Binding (Teclado y ratón) en Tkinter
 
 Los eventos permiten que la aplicación responda a acciones del usuario, como clics de ratón o pulsaciones de teclas.
 
-#### Binding de Eventos
+#### Binding de eventos
 
 Se usa el método `.bind()` para asociar un evento con una función (callback).
 
@@ -214,7 +213,7 @@ Se usa el método `.bind()` para asociar un evento con una función (callback).
 widget.bind(evento, función_callback)
 ```
 
-**Eventos Comunes:**
+**Eventos comunes:**
 
 - `<Button-1>`: Clic izquierdo del ratón.
 - `<Button-3>`: Clic derecho del ratón.
@@ -242,7 +241,7 @@ ventana.bind("<Key>", tecla_presionada)
 ventana.mainloop()
 ```
 
-#### Eventos de Ratón
+#### Eventos de ratón
 
 Se pueden capturar movimientos, doble clic, etc.
 
@@ -255,7 +254,7 @@ def doble_clic(event):
 ventana.bind("<Double-Button-1>", doble_clic)
 ```
 
-#### Eventos de Teclado
+#### Eventos de teclado
 
 Capturar combinaciones de teclas o teclas específicas.
 
@@ -268,11 +267,11 @@ def enter_presionado(event):
 ventana.bind("<Return>", enter_presionado)
 ```
 
-### Manejo de Ventanas Emergentes (Toplevel) en Tkinter
+### Manejo de ventanas emergentes (Toplevel) en Tkinter
 
 Las ventanas emergentes se crean usando el widget `Toplevel`, permitiendo crear ventanas adicionales aparte de la principal.
 
-**Crear una Ventana Toplevel:**
+**Crear una ventana Toplevel:**
 
 ```python
 def abrir_ventana():
@@ -373,7 +372,7 @@ boton_size.pack()
 
 ---
 
-## 4. Gestión de Imágenes en Tkinter
+## 4. Gestión de imágenes en Tkinter
 
 Tkinter permite mostrar imágenes en las interfaces gráficas. Para manejar formatos más avanzados, se suele utilizar la biblioteca Pillow.
 
@@ -387,7 +386,7 @@ Pillow es una biblioteca de procesamiento de imágenes en Python que extiende la
 pip install Pillow
 ```
 
-**Cargar y Mostrar una Imagen con Pillow:**
+**Cargar y mostrar una imagen con Pillow:**
 
 ```python
 import tkinter as tk
@@ -407,7 +406,7 @@ etiqueta.pack()
 ventana.mainloop()
 ```
 
-### Carga de Imágenes desde GitHub
+### Carga de imágenes desde GitHub
 
 Para cargar imágenes directamente desde GitHub (o cualquier URL), se puede utilizar `requests` para descargar la imagen y luego abrirla con Pillow.
 
@@ -435,7 +434,7 @@ ventana.mainloop()
 
 **Nota:** Asegúrate de que la URL apunte directamente a la imagen y que sea accesible públicamente.
 
-### Uso de Hilos
+### Uso de hilos
 
 Cuando se realizan operaciones que consumen tiempo (como descargar imágenes), es recomendable usar hilos para evitar que la interfaz gráfica se congele.
 
@@ -485,9 +484,9 @@ El patrón de diseño MVC separa la aplicación en tres componentes principales:
 - **Vista:** Se encarga de la presentación de la información.
 - **Controlador:** Maneja la interacción del usuario y actualiza el modelo y la vista.
 
-### Implementación Básica de MVC en Tkinter
+### Implementación básica de MVC en Tkinter
 
-**Estructura de Archivos:**
+**Estructura de archivos:**
 
 ```
 mi_app/
@@ -574,7 +573,7 @@ if __name__ == "__main__":
     main()
 ```
 
-### Explicación del Código
+### Explicación del código
 
 1. **Modelo (`modelo.py`):** Contiene la lógica de negocio y los datos. En este ejemplo, maneja una cadena de texto.
 
@@ -584,17 +583,17 @@ if __name__ == "__main__":
 
 4. **Main (`main.py`):** Inicializa los componentes y ejecuta la aplicación.
 
-### Ventajas de Usar MVC
+### Ventajas de usar MVC
 
-- **Separación de Responsabilidades:** Facilita el mantenimiento y la escalabilidad.
-- **Reutilización de Código:** Componentes independientes pueden ser reutilizados en diferentes contextos.
-- **Facilita las Pruebas:** Cada componente puede ser probado de manera aislada.
+- **Separación de responsabilidades:** Facilita el mantenimiento y la escalabilidad.
+- **Reutilización de código:** Componentes independientes pueden ser reutilizados en diferentes contextos.
+- **Facilita las pruebas:** Cada componente puede ser probado de manera aislada.
 
-### Consideraciones al Implementar MVC en Tkinter
+### Consideraciones al implementar MVC en Tkinter
 
-- **Comunicación entre Componentes:** El controlador debe gestionar la comunicación entre el modelo y la vista.
-- **Actualización de la Vista:** Cuando el modelo cambia, la vista debe actualizarse para reflejar los nuevos datos.
-- **Eventos en la Vista:** La vista no debe contener lógica de negocio; solo debe manejar la presentación y capturar eventos.
+- **Comunicación entre componentes:** El controlador debe gestionar la comunicación entre el modelo y la vista.
+- **Actualización de la vista:** Cuando el modelo cambia, la vista debe actualizarse para reflejar los nuevos datos.
+- **Eventos en la vista:** La vista no debe contener lógica de negocio; solo debe manejar la presentación y capturar eventos.
 
 ---
 
