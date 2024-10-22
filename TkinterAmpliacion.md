@@ -501,402 +501,6 @@ ventana.mainloop()
 - Si el usuario confirma, se llama a `ventana.destroy()` para cerrar la aplicación.
 
 ---
-## 4. Gestión de Imágenes en Tkinter
-
-Tkinter proporciona funcionalidades básicas para manejar y mostrar imágenes en las interfaces gráficas. Sin embargo, para trabajar con formatos más avanzados y realizar operaciones de procesamiento de imágenes, es común utilizar la biblioteca Pillow (PIL Fork). Además, cargar imágenes desde fuentes externas, como GitHub, y manejar tareas que consumen tiempo, como la descarga de imágenes, puede requerir el uso de hilos para mantener la interfaz responsiva.
-
-### Uso de Pillow
-
-#### Instalación de Pillow
-
-Pillow es una biblioteca de procesamiento de imágenes en Python que extiende las capacidades de Tkinter para manejar más formatos y realizar operaciones sobre las imágenes.
-
-```bash
-pip install Pillow
-```
-
-#### Cargar y Mostrar una Imagen con Pillow
-
-**Ejemplo Básico: Mostrar una Imagen en una Ventana Tkinter**
-
-```python
-import tkinter as tk
-from PIL import Image, ImageTk
-
-ventana = tk.Tk()
-ventana.title("Mostrar Imagen con Pillow")
-
-# Cargar la imagen desde el sistema de archivos
-imagen = Image.open('ruta/a/tu/imagen.jpg')
-
-# Convertir la imagen para que sea compatible con Tkinter
-imagen_tk = ImageTk.PhotoImage(imagen)
-
-# Crear un widget Label para mostrar la imagen
-etiqueta = tk.Label(ventana, image=imagen_tk)
-etiqueta.pack()
-
-ventana.mainloop()
-```
-
-**Explicación:**
-
-- **Cargar la Imagen:** `Image.open('ruta/a/tu/imagen.jpg')` abre la imagen utilizando Pillow.
-- **Convertir para Tkinter:** `ImageTk.PhotoImage(imagen)` convierte la imagen al formato compatible con Tkinter.
-- **Mostrar la Imagen:** Se crea un widget `Label` que contiene la imagen y se empaqueta en la ventana.
-
-#### Redimensionar Imágenes
-
-A menudo, es necesario ajustar el tamaño de las imágenes para que se adapten a la interfaz.
-
-**Ejemplo: Redimensionar una Imagen**
-
-```python
-import tkinter as tk
-from PIL import Image, ImageTk
-
-ventana = tk.Tk()
-ventana.title("Redimensionar Imagen")
-
-# Cargar la imagen
-imagen = Image.open('ruta/a/tu/imagen.jpg')
-
-# Redimensionar la imagen a 200x200 píxeles
-imagen_redimensionada = imagen.resize((200, 200), Image.ANTIALIAS)
-
-# Convertir para Tkinter
-imagen_tk = ImageTk.PhotoImage(imagen_redimensionada)
-
-# Mostrar la imagen
-etiqueta = tk.Label(ventana, image=imagen_tk)
-etiqueta.pack()
-
-ventana.mainloop()
-```
-
-**Explicación:**
-
-- **Redimensionar:** `imagen.resize((200, 200), Image.ANTIALIAS)` cambia el tamaño de la imagen a 200x200 píxeles con antialiasing para suavizar la imagen.
-- **Mostrar:** La imagen redimensionada se muestra en un widget `Label`.
-
-#### Rotar y Girar Imágenes
-
-Pillow permite realizar transformaciones como rotación y giro.
-
-**Ejemplo: Rotar una Imagen 90 Grados**
-
-```python
-import tkinter as tk
-from PIL import Image, ImageTk
-
-ventana = tk.Tk()
-ventana.title("Rotar Imagen")
-
-# Cargar la imagen
-imagen = Image.open('ruta/a/tu/imagen.jpg')
-
-# Rotar la imagen 90 grados
-imagen_rotada = imagen.rotate(90, expand=True)
-
-# Convertir para Tkinter
-imagen_tk = ImageTk.PhotoImage(imagen_rotada)
-
-# Mostrar la imagen
-etiqueta = tk.Label(ventana, image=imagen_tk)
-etiqueta.pack()
-
-ventana.mainloop()
-```
-
-**Explicación:**
-
-- **Rotar:** `imagen.rotate(90, expand=True)` rota la imagen 90 grados. El parámetro `expand=True` ajusta el tamaño de la imagen para evitar recortes.
-- **Mostrar:** La imagen rotada se muestra en un widget `Label`.
-
-### Carga de Imágenes desde GitHub
-
-Cargar imágenes directamente desde GitHub o cualquier URL implica descargar la imagen y luego procesarla para mostrarla en Tkinter. Para esto, se utilizan las bibliotecas `requests` para la descarga y `io.BytesIO` para manejar los datos de la imagen en memoria.
-
-#### Descargar y Mostrar una Imagen desde una URL
-
-**Ejemplo: Cargar una Imagen desde GitHub**
-
-```python
-import tkinter as tk
-from PIL import Image, ImageTk
-import requests
-from io import BytesIO
-
-ventana = tk.Tk()
-ventana.title("Cargar Imagen desde URL")
-
-# URL de la imagen en GitHub
-url = 'https://github.com/usuario/repositorio/raw/main/imagen.jpg'
-
-# Descargar la imagen
-respuesta = requests.get(url)
-
-# Verificar si la descarga fue exitosa
-if respuesta.status_code == 200:
-    # Abrir la imagen desde los bytes descargados
-    imagen = Image.open(BytesIO(respuesta.content))
-    imagen_tk = ImageTk.PhotoImage(imagen)
-    
-    # Mostrar la imagen
-    etiqueta = tk.Label(ventana, image=imagen_tk)
-    etiqueta.pack()
-else:
-    etiqueta = tk.Label(ventana, text="No se pudo descargar la imagen.")
-    etiqueta.pack()
-
-ventana.mainloop()
-```
-
-**Explicación:**
-
-- **Descargar la Imagen:** Se utiliza `requests.get(url)` para descargar la imagen desde la URL proporcionada.
-- **Verificar Descarga:** Se comprueba si la respuesta tiene un código de estado `200` (éxito).
-- **Abrir y Mostrar:** Si la descarga es exitosa, se abre la imagen desde los bytes descargados utilizando `BytesIO` y se muestra en un widget `Label`.
-- **Manejo de Errores:** Si la descarga falla, se muestra un mensaje de error en la ventana.
-
-#### Consideraciones de Seguridad y Acceso
-
-- **URLs Correctas:** Asegúrate de que la URL apunte directamente al archivo de la imagen y que sea accesible públicamente.
-- **Manejo de Errores:** Implementa manejo de excepciones para gestionar posibles fallos en la descarga o en la apertura de la imagen.
-- **Autenticación:** Si la imagen está en un repositorio privado, se necesitarán métodos de autenticación adecuados para acceder a ella.
-
-### Uso de Hilos
-
-Cuando se realizan operaciones que consumen tiempo, como descargar imágenes desde Internet, la interfaz gráfica puede volverse no responsiva si se ejecutan en el hilo principal. Para evitar esto, se puede utilizar la biblioteca `threading` para ejecutar estas tareas en hilos separados.
-
-#### Descarga y Muestra de una Imagen en un Hilo Separado
-
-**Ejemplo: Descargar y Mostrar una Imagen sin Congelar la Interfaz**
-
-```python
-import tkinter as tk
-from PIL import Image, ImageTk
-import requests
-from io import BytesIO
-import threading
-
-def descargar_imagen(url, etiqueta):
-    try:
-        respuesta = requests.get(url)
-        respuesta.raise_for_status()  # Lanza una excepción si la descarga falla
-        imagen = Image.open(BytesIO(respuesta.content))
-        imagen_tk = ImageTk.PhotoImage(imagen)
-        
-        # Actualizar la interfaz en el hilo principal
-        etiqueta.config(image=imagen_tk)
-        etiqueta.image = imagen_tk  # Mantener una referencia
-    except requests.exceptions.RequestException as e:
-        print(f"Error al descargar la imagen: {e}")
-        etiqueta.config(text="Error al descargar la imagen.")
-
-def iniciar_descarga():
-    url = 'https://github.com/usuario/repositorio/raw/main/imagen.jpg'
-    hilo = threading.Thread(target=descargar_imagen, args=(url, etiqueta))
-    hilo.start()
-
-ventana = tk.Tk()
-ventana.title("Descargar Imagen con Hilos")
-
-etiqueta = tk.Label(ventana, text="Descargando imagen...")
-etiqueta.pack(pady=10)
-
-boton_descargar = tk.Button(ventana, text="Descargar Imagen", command=iniciar_descarga)
-boton_descargar.pack(pady=5)
-
-ventana.mainloop()
-```
-
-**Explicación:**
-
-- **Función `descargar_imagen()`:** Descarga la imagen desde la URL, la procesa y actualiza el widget `Label`. Se maneja cualquier excepción que pueda ocurrir durante la descarga.
-- **Función `iniciar_descarga()`:** Crea y inicia un hilo que ejecuta `descargar_imagen()`. Esto asegura que la descarga no bloquea el hilo principal de la interfaz.
-- **Actualizar la Interfaz:** Aunque Tkinter no es seguro para hilos, en este caso, `etiqueta.config()` se ejecuta desde el hilo secundario. Para mayor seguridad, es preferible utilizar métodos como `after()` para programar actualizaciones en el hilo principal.
-
-#### Mejorando la Seguridad de Hilos con `after()`
-
-Para asegurar que las actualizaciones de la interfaz se realicen en el hilo principal, se puede utilizar el método `after()` de Tkinter.
-
-**Ejemplo Mejorado: Uso de `after()` para Actualizar la Interfaz**
-
-```python
-import tkinter as tk
-from PIL import Image, ImageTk
-import requests
-from io import BytesIO
-import threading
-
-def descargar_imagen(url, callback):
-    try:
-        respuesta = requests.get(url)
-        respuesta.raise_for_status()
-        imagen = Image.open(BytesIO(respuesta.content))
-        imagen_tk = ImageTk.PhotoImage(imagen)
-        # Programar la actualización de la interfaz en el hilo principal
-        ventana.after(0, callback, imagen_tk)
-    except requests.exceptions.RequestException as e:
-        print(f"Error al descargar la imagen: {e}")
-        ventana.after(0, callback, None)
-
-def actualizar_etiqueta(imagen_tk):
-    if imagen_tk:
-        etiqueta.config(image=imagen_tk)
-        etiqueta.image = imagen_tk  # Mantener una referencia
-    else:
-        etiqueta.config(text="Error al descargar la imagen.")
-
-def iniciar_descarga():
-    url = 'https://github.com/usuario/repositorio/raw/main/imagen.jpg'
-    hilo = threading.Thread(target=descargar_imagen, args=(url, actualizar_etiqueta))
-    hilo.start()
-
-ventana = tk.Tk()
-ventana.title("Descargar Imagen con Hilos y after()")
-
-etiqueta = tk.Label(ventana, text="Descargando imagen...")
-etiqueta.pack(pady=10)
-
-boton_descargar = tk.Button(ventana, text="Descargar Imagen", command=iniciar_descarga)
-boton_descargar.pack(pady=5)
-
-ventana.mainloop()
-```
-
-**Explicación:**
-
-- **Función `descargar_imagen()`:** Descarga la imagen y luego utiliza `ventana.after(0, callback, imagen_tk)` para programar la llamada a `actualizar_etiqueta()` en el hilo principal.
-- **Función `actualizar_etiqueta()`:** Actualiza el widget `Label` con la imagen descargada o muestra un mensaje de error.
-- **Beneficios:** Garantiza que todas las actualizaciones de la interfaz se realicen en el hilo principal, evitando posibles problemas de concurrencia.
-
----
-
----
-
-## 5. Modelo Vista Controlador (MVC) en Tkinter
-
-El patrón de diseño MVC separa la aplicación en tres componentes principales:
-
-- **Modelo:** Gestiona los datos y la lógica de negocio.
-- **Vista:** Se encarga de la presentación de la información.
-- **Controlador:** Maneja la interacción del usuario y actualiza el modelo y la vista.
-
-### Implementación básica de MVC en Tkinter
-
-**Estructura de archivos:**
-
-```
-mi_app/
-│
-├── modelo.py
-├── vista.py
-├── controlador.py
-└── main.py
-```
-
-**modelo.py:**
-
-```python
-class Modelo:
-    def __init__(self):
-        self.datos = "Hola, Mundo!"
-
-    def obtener_datos(self):
-        return self.datos
-
-    def actualizar_datos(self, nuevo_texto):
-        self.datos = nuevo_texto
-```
-
-**vista.py:**
-
-```python
-import tkinter as tk
-
-class Vista:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Aplicación MVC con Tkinter")
-        
-        self.etiqueta = tk.Label(root, text="")
-        self.etiqueta.pack()
-        
-        self.entrada = tk.Entry(root)
-        self.entrada.pack()
-        
-        self.boton = tk.Button(root, text="Actualizar")
-        self.boton.pack()
-
-    def actualizar_etiqueta(self, texto):
-        self.etiqueta.config(text=texto)
-```
-
-**controlador.py:**
-
-```python
-class Controlador:
-    def __init__(self, modelo, vista):
-        self.modelo = modelo
-        self.vista = vista
-
-        # Inicializar la vista con datos del modelo
-        self.vista.actualizar_etiqueta(self.modelo.obtener_datos())
-
-        # Asociar eventos
-        self.vista.boton.config(command=self.actualizar_modelo)
-
-    def actualizar_modelo(self):
-        nuevo_texto = self.vista.entrada.get()
-        self.modelo.actualizar_datos(nuevo_texto)
-        self.vista.actualizar_etiqueta(self.modelo.obtener_datos())
-```
-
-**main.py:**
-
-```python
-import tkinter as tk
-from modelo import Modelo
-from vista import Vista
-from controlador import Controlador
-
-def main():
-    root = tk.Tk()
-    modelo = Modelo()
-    vista = Vista(root)
-    controlador = Controlador(modelo, vista)
-    root.mainloop()
-
-if __name__ == "__main__":
-    main()
-```
-
-### Explicación del código
-
-1. **Modelo (`modelo.py`):** Contiene la lógica de negocio y los datos. En este ejemplo, maneja una cadena de texto.
-
-2. **Vista (`vista.py`):** Define la interfaz gráfica. Tiene una etiqueta para mostrar texto, una entrada para que el usuario ingrese nuevo texto y un botón para actualizar.
-
-3. **Controlador (`controlador.py`):** Interactúa entre el modelo y la vista. Inicializa la vista con datos del modelo y actualiza el modelo cuando el usuario interactúa con la interfaz.
-
-4. **Main (`main.py`):** Inicializa los componentes y ejecuta la aplicación.
-
-### Ventajas de usar MVC
-
-- **Separación de responsabilidades:** Facilita el mantenimiento y la escalabilidad.
-- **Reutilización de código:** Componentes independientes pueden ser reutilizados en diferentes contextos.
-- **Facilita las pruebas:** Cada componente puede ser probado de manera aislada.
-
-### Consideraciones al implementar MVC en Tkinter
-
-- **Comunicación entre componentes:** El controlador debe gestionar la comunicación entre el modelo y la vista.
-- **Actualización de la vista:** Cuando el modelo cambia, la vista debe actualizarse para reflejar los nuevos datos.
-- **Eventos en la vista:** La vista no debe contener lógica de negocio; solo debe manejar la presentación y capturar eventos.
-
----
-
 ## 4. Funciones Lambda en Python y su Aplicación en Tkinter
 
 Las funciones lambda son una característica poderosa de Python que permiten definir funciones pequeñas y anónimas en una sola línea. En Tkinter, las funciones lambda son especialmente útiles para manejar callbacks y pasar argumentos a las funciones asociadas a eventos o comandos de widgets.
@@ -1374,36 +978,19 @@ boton_descargar.pack(pady=5)
 
 ventana.mainloop()
 ```
-
-**Explicación:**
-
-- **Función `descargar_imagen()`:** Descarga la imagen y luego utiliza `ventana.after(0, callback, imagen_tk)` para programar la llamada a `actualizar_etiqueta()` en el hilo principal.
-- **Función `actualizar_etiqueta()`:** Actualiza el widget `Label` con la imagen descargada o muestra un mensaje de error.
-- **Beneficios:** Garantiza que todas las actualizaciones de la interfaz se realicen en el hilo principal, evitando posibles problemas de concurrencia.
-
 ---
 
-## 6. Modelo Vista Controlador (MVC) en Tkinter
+## 5. Modelo Vista Controlador (MVC) en Tkinter
 
-El patrón de diseño Modelo-Vista-Controlador (MVC) es una arquitectura que separa la lógica de la aplicación en tres componentes principales: Modelo, Vista y Controlador. Esta separación facilita el mantenimiento, la escalabilidad y la reutilización del código. En el contexto de Tkinter, implementar MVC puede ayudar a organizar aplicaciones más complejas de manera estructurada.
+El patrón de diseño MVC separa la aplicación en tres componentes principales:
 
-### Componentes del MVC
+- **Modelo:** Gestiona los datos y la lógica de negocio.
+- **Vista:** Se encarga de la presentación de la información.
+- **Controlador:** Maneja la interacción del usuario y actualiza el modelo y la vista.
 
-1. **Modelo:**
-   - **Responsabilidad:** Gestiona los datos y la lógica de negocio de la aplicación.
-   - **Funciones:** Acceder y manipular datos, realizar cálculos, interactuar con bases de datos o APIs.
-   
-2. **Vista:**
-   - **Responsabilidad:** Maneja la presentación de la información al usuario.
-   - **Funciones:** Crear y actualizar widgets de la interfaz gráfica, mostrar datos del modelo.
+### Implementación básica de MVC en Tkinter
 
-3. **Controlador:**
-   - **Responsabilidad:** Actúa como intermediario entre el Modelo y la Vista, manejando la interacción del usuario.
-   - **Funciones:** Capturar eventos de la Vista, actualizar el Modelo y la Vista según sea necesario.
-
-### Implementación Básica de MVC en Tkinter
-
-**Estructura de Archivos:**
+**Estructura de archivos:**
 
 ```
 mi_app/
@@ -1414,13 +1001,9 @@ mi_app/
 └── main.py
 ```
 
-#### 1. `modelo.py`
-
-Define el Modelo, que maneja los datos y la lógica de negocio.
+**modelo.py:**
 
 ```python
-# modelo.py
-
 class Modelo:
     def __init__(self):
         self.datos = "Hola, Mundo!"
@@ -1432,20 +1015,9 @@ class Modelo:
         self.datos = nuevo_texto
 ```
 
-**Explicación:**
-
-- **Atributo `datos`:** Almacena una cadena de texto.
-- **Métodos:**
-  - `obtener_datos()`: Devuelve el valor actual de `datos`.
-  - `actualizar_datos(nuevo_texto)`: Actualiza el valor de `datos` con `nuevo_texto`.
-
-#### 2. `vista.py`
-
-Define la Vista, que maneja la interfaz gráfica.
+**vista.py:**
 
 ```python
-# vista.py
-
 import tkinter as tk
 
 class Vista:
@@ -1454,33 +1026,21 @@ class Vista:
         self.root.title("Aplicación MVC con Tkinter")
         
         self.etiqueta = tk.Label(root, text="")
-        self.etiqueta.pack(pady=10)
+        self.etiqueta.pack()
         
         self.entrada = tk.Entry(root)
-        self.entrada.pack(pady=5)
+        self.entrada.pack()
         
         self.boton = tk.Button(root, text="Actualizar")
-        self.boton.pack(pady=10)
+        self.boton.pack()
 
     def actualizar_etiqueta(self, texto):
         self.etiqueta.config(text=texto)
 ```
 
-**Explicación:**
-
-- **Widgets:**
-  - `etiqueta`: Muestra texto.
-  - `entrada`: Permite al usuario ingresar texto.
-  - `boton`: Botón para actualizar los datos.
-- **Método `actualizar_etiqueta(texto)`:** Actualiza el texto de la etiqueta con el valor proporcionado.
-
-#### 3. `controlador.py`
-
-Define el Controlador, que maneja la interacción entre el Modelo y la Vista.
+**controlador.py:**
 
 ```python
-# controlador.py
-
 class Controlador:
     def __init__(self, modelo, vista):
         self.modelo = modelo
@@ -1498,24 +1058,9 @@ class Controlador:
         self.vista.actualizar_etiqueta(self.modelo.obtener_datos())
 ```
 
-**Explicación:**
-
-- **Constructor `__init__`:**
-  - Asigna el `modelo` y la `vista`.
-  - Inicializa la etiqueta de la vista con los datos del modelo.
-  - Configura el botón para llamar al método `actualizar_modelo` cuando se presiona.
-- **Método `actualizar_modelo()`:**
-  - Obtiene el texto ingresado por el usuario en la entrada.
-  - Actualiza el modelo con el nuevo texto.
-  - Actualiza la etiqueta de la vista para reflejar los cambios.
-
-#### 4. `main.py`
-
-Inicia la aplicación, creando instancias del Modelo, Vista y Controlador, y ejecutando el bucle principal de Tkinter.
+**main.py:**
 
 ```python
-# main.py
-
 import tkinter as tk
 from modelo import Modelo
 from vista import Vista
@@ -1532,63 +1077,27 @@ if __name__ == "__main__":
     main()
 ```
 
-**Explicación:**
+### Explicación del código
 
-- **Función `main()`:**
-  - Crea la ventana principal de Tkinter.
-  - Instancia el Modelo, la Vista y el Controlador.
-  - Inicia el bucle principal de Tkinter con `root.mainloop()`.
-- **Ejecución Condicional:**
-  - Solo ejecuta `main()` si el script se ejecuta directamente, permitiendo la importación segura de los módulos.
+1. **Modelo (`modelo.py`):** Contiene la lógica de negocio y los datos. En este ejemplo, maneja una cadena de texto.
 
-### Explicación del Código MVC
+2. **Vista (`vista.py`):** Define la interfaz gráfica. Tiene una etiqueta para mostrar texto, una entrada para que el usuario ingrese nuevo texto y un botón para actualizar.
 
-1. **Modelo (`modelo.py`):**
-   - Maneja los datos de la aplicación.
-   - En este ejemplo, gestiona una simple cadena de texto.
+3. **Controlador (`controlador.py`):** Interactúa entre el modelo y la vista. Inicializa la vista con datos del modelo y actualiza el modelo cuando el usuario interactúa con la interfaz.
 
-2. **Vista (`vista.py`):**
-   - Crea la interfaz gráfica utilizando Tkinter.
-   - Contiene widgets para mostrar y actualizar datos.
-   - No contiene lógica de negocio.
+4. **Main (`main.py`):** Inicializa los componentes y ejecuta la aplicación.
 
-3. **Controlador (`controlador.py`):**
-   - Conecta el Modelo y la Vista.
-   - Maneja eventos de la Vista y actualiza el Modelo en consecuencia.
-   - Actualiza la Vista cuando el Modelo cambia.
+### Ventajas de usar MVC
 
-4. **Main (`main.py`):**
-   - Configura y ejecuta la aplicación.
-   - Mantiene la separación de responsabilidades entre los componentes.
+- **Separación de responsabilidades:** Facilita el mantenimiento y la escalabilidad.
+- **Reutilización de código:** Componentes independientes pueden ser reutilizados en diferentes contextos.
+- **Facilita las pruebas:** Cada componente puede ser probado de manera aislada.
 
-### Ventajas de Usar MVC en Tkinter
+### Consideraciones al implementar MVC en Tkinter
 
-- **Separación de Responsabilidades:**
-  - Cada componente (Modelo, Vista, Controlador) tiene una responsabilidad clara y definida.
-  - Facilita la comprensión y el mantenimiento del código.
+- **Comunicación entre componentes:** El controlador debe gestionar la comunicación entre el modelo y la vista.
+- **Actualización de la vista:** Cuando el modelo cambia, la vista debe actualizarse para reflejar los nuevos datos.
+- **Eventos en la vista:** La vista no debe contener lógica de negocio; solo debe manejar la presentación y capturar eventos.
 
-- **Reutilización de Código:**
-  - Componentes independientes pueden ser reutilizados en diferentes partes de la aplicación o en otros proyectos.
-
-- **Escalabilidad:**
-  - Permite añadir nuevas funcionalidades sin afectar significativamente a otros componentes.
-
-- **Facilita las Pruebas:**
-  - Cada componente puede ser probado de manera aislada, mejorando la calidad del código.
-
-### Consideraciones al Implementar MVC en Tkinter
-
-- **Comunicación entre Componentes:**
-  - El Controlador debe manejar la comunicación entre el Modelo y la Vista.
-  - Evitar que la Vista acceda directamente al Modelo y viceversa.
-
-- **Actualización de la Vista:**
-  - Cuando el Modelo cambia, la Vista debe actualizarse para reflejar los nuevos datos.
-  - Esto puede implicar llamar a métodos de la Vista desde el Controlador.
-
-- **Eventos en la Vista:**
-  - La Vista captura los eventos de usuario (como clics de botones) y los pasa al Controlador para su manejo.
-
-- **Evitar Lógica en la Vista:**
-  - La Vista no debe contener lógica de negocio ni manipular directamente los datos del Modelo.
+---
 
