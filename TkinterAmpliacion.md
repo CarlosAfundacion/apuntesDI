@@ -1100,9 +1100,9 @@ if __name__ == "__main__":
 - **Eventos en la vista:** La vista no debe contener lógica de negocio; solo debe manejar la presentación y capturar eventos.
 
 ---
-Aquí tienes un ejercicio más complejo, diseñado para que los alumnos inviertan aproximadamente 15 horas en su implementación. Este ejercicio incorpora la gestión de ventanas, uso de `Toplevel`, hilos, eventos `bind`, carga de imágenes desde GitHub, manejo del ratón y teclado, y más. Se ha añadido la complejidad de ajustar las ventanas de manera automática al contenido y centrarlas en la pantalla.
 
-## **Ejercicio: Defensa de la Ciudad**
+
+## **Ejercicio: Defensa de la ciudad**
 
 En este juego, el jugador debe proteger una ciudad de oleadas de enemigos que aparecerán en posiciones aleatorias de la pantalla dentro de una matriz de 10x10. El objetivo es hacer clic sobre los enemigos para eliminarlos antes de que lleguen a la ciudad. Cada enemigo eliminado otorga puntos, y el juego finaliza cuando un enemigo llega a la ciudad.
 
@@ -1143,7 +1143,7 @@ El código se implementará en sprint2tkinter dentro de la carpeta DI.
 
 ---
 
-### **Rúbrica de Evaluación:**
+### **Rúbrica de evaluación:**
 
 | Criterio                          | Excelente (3)                       | Adecuado (2)                         | Insuficiente (1)                  | Puntos |
 |-----------------------------------|-------------------------------------|--------------------------------------|-----------------------------------|--------|
