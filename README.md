@@ -501,21 +501,23 @@ ventana.mainloop()
 - Si el usuario confirma, se llama a `ventana.destroy()` para cerrar la aplicación.
 
 ---
-## 4. Gestión de imágenes en Tkinter
+## 4. Gestión de Imágenes en Tkinter
 
-Tkinter permite mostrar imágenes en las interfaces gráficas. Para manejar formatos más avanzados, se suele utilizar la biblioteca Pillow.
+Tkinter proporciona funcionalidades básicas para manejar y mostrar imágenes en las interfaces gráficas. Sin embargo, para trabajar con formatos más avanzados y realizar operaciones de procesamiento de imágenes, es común utilizar la biblioteca Pillow (PIL Fork). Además, cargar imágenes desde fuentes externas, como GitHub, y manejar tareas que consumen tiempo, como la descarga de imágenes, puede requerir el uso de hilos para mantener la interfaz responsiva.
 
 ### Uso de Pillow
 
-Pillow es una biblioteca de procesamiento de imágenes en Python que extiende las capacidades de Tkinter para manejar más formatos y realizar operaciones sobre las imágenes.
+#### Instalación de Pillow
 
-**Instalación de Pillow:**
+Pillow es una biblioteca de procesamiento de imágenes en Python que extiende las capacidades de Tkinter para manejar más formatos y realizar operaciones sobre las imágenes.
 
 ```bash
 pip install Pillow
 ```
 
-**Cargar y mostrar una imagen con Pillow:**
+#### Cargar y Mostrar una Imagen con Pillow
+
+**Ejemplo Básico: Mostrar una Imagen en una Ventana Tkinter**
 
 ```python
 import tkinter as tk
@@ -524,8 +526,10 @@ from PIL import Image, ImageTk
 ventana = tk.Tk()
 ventana.title("Mostrar Imagen con Pillow")
 
-# Cargar la imagen
-imagen = Image.open('imagen.jpg')
+# Cargar la imagen desde el sistema de archivos
+imagen = Image.open('ruta/a/tu/imagen.jpg')
+
+# Convertir la imagen para que sea compatible con Tkinter
 imagen_tk = ImageTk.PhotoImage(imagen)
 
 # Crear un widget Label para mostrar la imagen
@@ -535,11 +539,87 @@ etiqueta.pack()
 ventana.mainloop()
 ```
 
-### Carga de imágenes desde GitHub
+**Explicación:**
 
-Para cargar imágenes directamente desde GitHub (o cualquier URL), se puede utilizar `requests` para descargar la imagen y luego abrirla con Pillow.
+- **Cargar la Imagen:** `Image.open('ruta/a/tu/imagen.jpg')` abre la imagen utilizando Pillow.
+- **Convertir para Tkinter:** `ImageTk.PhotoImage(imagen)` convierte la imagen al formato compatible con Tkinter.
+- **Mostrar la Imagen:** Se crea un widget `Label` que contiene la imagen y se empaqueta en la ventana.
 
-**Ejemplo: Cargar una imagen desde una URL**
+#### Redimensionar Imágenes
+
+A menudo, es necesario ajustar el tamaño de las imágenes para que se adapten a la interfaz.
+
+**Ejemplo: Redimensionar una Imagen**
+
+```python
+import tkinter as tk
+from PIL import Image, ImageTk
+
+ventana = tk.Tk()
+ventana.title("Redimensionar Imagen")
+
+# Cargar la imagen
+imagen = Image.open('ruta/a/tu/imagen.jpg')
+
+# Redimensionar la imagen a 200x200 píxeles
+imagen_redimensionada = imagen.resize((200, 200), Image.ANTIALIAS)
+
+# Convertir para Tkinter
+imagen_tk = ImageTk.PhotoImage(imagen_redimensionada)
+
+# Mostrar la imagen
+etiqueta = tk.Label(ventana, image=imagen_tk)
+etiqueta.pack()
+
+ventana.mainloop()
+```
+
+**Explicación:**
+
+- **Redimensionar:** `imagen.resize((200, 200), Image.ANTIALIAS)` cambia el tamaño de la imagen a 200x200 píxeles con antialiasing para suavizar la imagen.
+- **Mostrar:** La imagen redimensionada se muestra en un widget `Label`.
+
+#### Rotar y Girar Imágenes
+
+Pillow permite realizar transformaciones como rotación y giro.
+
+**Ejemplo: Rotar una Imagen 90 Grados**
+
+```python
+import tkinter as tk
+from PIL import Image, ImageTk
+
+ventana = tk.Tk()
+ventana.title("Rotar Imagen")
+
+# Cargar la imagen
+imagen = Image.open('ruta/a/tu/imagen.jpg')
+
+# Rotar la imagen 90 grados
+imagen_rotada = imagen.rotate(90, expand=True)
+
+# Convertir para Tkinter
+imagen_tk = ImageTk.PhotoImage(imagen_rotada)
+
+# Mostrar la imagen
+etiqueta = tk.Label(ventana, image=imagen_tk)
+etiqueta.pack()
+
+ventana.mainloop()
+```
+
+**Explicación:**
+
+- **Rotar:** `imagen.rotate(90, expand=True)` rota la imagen 90 grados. El parámetro `expand=True` ajusta el tamaño de la imagen para evitar recortes.
+- **Mostrar:** La imagen rotada se muestra en un widget `Label`.
+
+### Carga de Imágenes desde GitHub
+
+Cargar imágenes directamente desde GitHub o cualquier URL implica descargar la imagen y luego procesarla para mostrarla en Tkinter. Para esto, se utilizan las bibliotecas `requests` para la descarga y `io.BytesIO` para manejar los datos de la imagen en memoria.
+
+#### Descargar y Mostrar una Imagen desde una URL
+
+**Ejemplo: Cargar una Imagen desde GitHub**
 
 ```python
 import tkinter as tk
@@ -550,24 +630,48 @@ from io import BytesIO
 ventana = tk.Tk()
 ventana.title("Cargar Imagen desde URL")
 
-url = 'https://github.com/usuario/repo/raw/main/imagen.jpg'
-respuesta = requests.get(url)
-imagen = Image.open(BytesIO(respuesta.content))
-imagen_tk = ImageTk.PhotoImage(imagen)
+# URL de la imagen en GitHub
+url = 'https://github.com/usuario/repositorio/raw/main/imagen.jpg'
 
-etiqueta = tk.Label(ventana, image=imagen_tk)
-etiqueta.pack()
+# Descargar la imagen
+respuesta = requests.get(url)
+
+# Verificar si la descarga fue exitosa
+if respuesta.status_code == 200:
+    # Abrir la imagen desde los bytes descargados
+    imagen = Image.open(BytesIO(respuesta.content))
+    imagen_tk = ImageTk.PhotoImage(imagen)
+    
+    # Mostrar la imagen
+    etiqueta = tk.Label(ventana, image=imagen_tk)
+    etiqueta.pack()
+else:
+    etiqueta = tk.Label(ventana, text="No se pudo descargar la imagen.")
+    etiqueta.pack()
 
 ventana.mainloop()
 ```
 
-**Nota:** Asegúrate de que la URL apunte directamente a la imagen y que sea accesible públicamente.
+**Explicación:**
 
-### Uso de hilos
+- **Descargar la Imagen:** Se utiliza `requests.get(url)` para descargar la imagen desde la URL proporcionada.
+- **Verificar Descarga:** Se comprueba si la respuesta tiene un código de estado `200` (éxito).
+- **Abrir y Mostrar:** Si la descarga es exitosa, se abre la imagen desde los bytes descargados utilizando `BytesIO` y se muestra en un widget `Label`.
+- **Manejo de Errores:** Si la descarga falla, se muestra un mensaje de error en la ventana.
 
-Cuando se realizan operaciones que consumen tiempo (como descargar imágenes), es recomendable usar hilos para evitar que la interfaz gráfica se congele.
+#### Consideraciones de Seguridad y Acceso
 
-**Ejemplo: Descargar y mostrar una imagen en un hilo separado**
+- **URLs Correctas:** Asegúrate de que la URL apunte directamente al archivo de la imagen y que sea accesible públicamente.
+- **Manejo de Errores:** Implementa manejo de excepciones para gestionar posibles fallos en la descarga o en la apertura de la imagen.
+- **Autenticación:** Si la imagen está en un repositorio privado, se necesitarán métodos de autenticación adecuados para acceder a ella.
+
+### Uso de Hilos
+
+Cuando se realizan operaciones que consumen tiempo, como descargar imágenes desde Internet, la interfaz gráfica puede volverse no responsiva si se ejecutan en el hilo principal. Para evitar esto, se puede utilizar la biblioteca `threading` para ejecutar estas tareas en hilos separados.
+
+#### Descarga y Muestra de una Imagen en un Hilo Separado
+
+**Ejemplo: Descargar y Mostrar una Imagen sin Congelar la Interfaz**
 
 ```python
 import tkinter as tk
@@ -579,29 +683,96 @@ import threading
 def descargar_imagen(url, etiqueta):
     try:
         respuesta = requests.get(url)
+        respuesta.raise_for_status()  # Lanza una excepción si la descarga falla
         imagen = Image.open(BytesIO(respuesta.content))
         imagen_tk = ImageTk.PhotoImage(imagen)
+        
+        # Actualizar la interfaz en el hilo principal
         etiqueta.config(image=imagen_tk)
         etiqueta.image = imagen_tk  # Mantener una referencia
-    except Exception as e:
+    except requests.exceptions.RequestException as e:
         print(f"Error al descargar la imagen: {e}")
+        etiqueta.config(text="Error al descargar la imagen.")
 
 def iniciar_descarga():
-    url = 'https://github.com/usuario/repo/raw/main/imagen.jpg'
+    url = 'https://github.com/usuario/repositorio/raw/main/imagen.jpg'
     hilo = threading.Thread(target=descargar_imagen, args=(url, etiqueta))
     hilo.start()
 
 ventana = tk.Tk()
 ventana.title("Descargar Imagen con Hilos")
 
-etiqueta = tk.Label(ventana)
-etiqueta.pack()
+etiqueta = tk.Label(ventana, text="Descargando imagen...")
+etiqueta.pack(pady=10)
 
 boton_descargar = tk.Button(ventana, text="Descargar Imagen", command=iniciar_descarga)
-boton_descargar.pack()
+boton_descargar.pack(pady=5)
 
 ventana.mainloop()
 ```
+
+**Explicación:**
+
+- **Función `descargar_imagen()`:** Descarga la imagen desde la URL, la procesa y actualiza el widget `Label`. Se maneja cualquier excepción que pueda ocurrir durante la descarga.
+- **Función `iniciar_descarga()`:** Crea y inicia un hilo que ejecuta `descargar_imagen()`. Esto asegura que la descarga no bloquea el hilo principal de la interfaz.
+- **Actualizar la Interfaz:** Aunque Tkinter no es seguro para hilos, en este caso, `etiqueta.config()` se ejecuta desde el hilo secundario. Para mayor seguridad, es preferible utilizar métodos como `after()` para programar actualizaciones en el hilo principal.
+
+#### Mejorando la Seguridad de Hilos con `after()`
+
+Para asegurar que las actualizaciones de la interfaz se realicen en el hilo principal, se puede utilizar el método `after()` de Tkinter.
+
+**Ejemplo Mejorado: Uso de `after()` para Actualizar la Interfaz**
+
+```python
+import tkinter as tk
+from PIL import Image, ImageTk
+import requests
+from io import BytesIO
+import threading
+
+def descargar_imagen(url, callback):
+    try:
+        respuesta = requests.get(url)
+        respuesta.raise_for_status()
+        imagen = Image.open(BytesIO(respuesta.content))
+        imagen_tk = ImageTk.PhotoImage(imagen)
+        # Programar la actualización de la interfaz en el hilo principal
+        ventana.after(0, callback, imagen_tk)
+    except requests.exceptions.RequestException as e:
+        print(f"Error al descargar la imagen: {e}")
+        ventana.after(0, callback, None)
+
+def actualizar_etiqueta(imagen_tk):
+    if imagen_tk:
+        etiqueta.config(image=imagen_tk)
+        etiqueta.image = imagen_tk  # Mantener una referencia
+    else:
+        etiqueta.config(text="Error al descargar la imagen.")
+
+def iniciar_descarga():
+    url = 'https://github.com/usuario/repositorio/raw/main/imagen.jpg'
+    hilo = threading.Thread(target=descargar_imagen, args=(url, actualizar_etiqueta))
+    hilo.start()
+
+ventana = tk.Tk()
+ventana.title("Descargar Imagen con Hilos y after()")
+
+etiqueta = tk.Label(ventana, text="Descargando imagen...")
+etiqueta.pack(pady=10)
+
+boton_descargar = tk.Button(ventana, text="Descargar Imagen", command=iniciar_descarga)
+boton_descargar.pack(pady=5)
+
+ventana.mainloop()
+```
+
+**Explicación:**
+
+- **Función `descargar_imagen()`:** Descarga la imagen y luego utiliza `ventana.after(0, callback, imagen_tk)` para programar la llamada a `actualizar_etiqueta()` en el hilo principal.
+- **Función `actualizar_etiqueta()`:** Actualiza el widget `Label` con la imagen descargada o muestra un mensaje de error.
+- **Beneficios:** Garantiza que todas las actualizaciones de la interfaz se realicen en el hilo principal, evitando posibles problemas de concurrencia.
+
+---
 
 ---
 
