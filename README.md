@@ -371,7 +371,136 @@ boton_size.pack()
 ```
 
 ---
+### Uso de `quit` y `destroy` en Tkinter
 
+En aplicaciones Tkinter, es importante gestionar correctamente el cierre de ventanas y la terminación del bucle principal. Los métodos `quit()` y `destroy()` son fundamentales para este propósito, pero tienen comportamientos distintos que es crucial entender para utilizarlos de manera efectiva.
+
+#### Método `quit()`
+
+- **Descripción:** `quit()` detiene el bucle principal de Tkinter (`mainloop()`), pero no cierra la ventana ni destruye los widgets.
+- **Uso Común:** Se utiliza para detener la ejecución de la aplicación sin cerrar la ventana. Es útil cuando se desea pausar la interfaz o realizar operaciones adicionales después de detener el bucle.
+
+**Ejemplo: Uso de `quit()` para detener el bucle principal**
+
+```python
+import tkinter as tk
+
+def detener_bucle():
+    print("Deteniendo el bucle principal.")
+    ventana.quit()
+
+ventana = tk.Tk()
+ventana.title("Uso de quit()")
+
+boton_quit = tk.Button(ventana, text="Detener Bucle", command=detener_bucle)
+boton_quit.pack(pady=20)
+
+ventana.mainloop()
+print("El bucle principal ha sido detenido.")
+```
+
+**Explicación:**
+
+- Al hacer clic en el botón "Detener Bucle", la función `detener_bucle()` se ejecuta, llamando a `ventana.quit()`.
+- Esto detiene el `mainloop()`, pero la ventana permanece abierta hasta que se cierre manualmente.
+
+#### Método `destroy()`
+
+- **Descripción:** `destroy()` cierra la ventana y elimina todos los widgets asociados, liberando los recursos utilizados por Tkinter.
+- **Uso Común:** Se utiliza para cerrar completamente la aplicación o una ventana específica, como una ventana emergente.
+
+**Ejemplo: Uso de `destroy()` para cerrar la aplicación**
+
+```python
+import tkinter as tk
+
+def cerrar_aplicacion():
+    print("Cerrando la aplicación.")
+    ventana.destroy()
+
+ventana = tk.Tk()
+ventana.title("Uso de destroy()")
+
+boton_cerrar = tk.Button(ventana, text="Cerrar Aplicación", command=cerrar_aplicacion)
+boton_cerrar.pack(pady=20)
+
+ventana.mainloop()
+print("La aplicación ha sido cerrada.")
+```
+
+**Explicación:**
+
+- Al hacer clic en el botón "Cerrar Aplicación", la función `cerrar_aplicacion()` se ejecuta, llamando a `ventana.destroy()`.
+- Esto cierra completamente la ventana y finaliza la aplicación.
+
+#### Diferencias entre `quit()` y `destroy()`
+
+| Método   | Acción Principal                                         | Persistencia de la Ventana        |
+|----------|----------------------------------------------------------|------------------------------------|
+| `quit()` | Detiene el bucle principal (`mainloop()`)                | La ventana sigue existiendo        |
+| `destroy()` | Cierra la ventana y elimina todos sus widgets          | La ventana deja de existir         |
+
+#### Ejemplo Combinado: Uso de `quit()` y `destroy()`
+
+En algunos casos, puede ser necesario utilizar ambos métodos para asegurarse de que la aplicación se cierre correctamente.
+
+```python
+import tkinter as tk
+
+def cerrar_completamente():
+    print("Cerrando la aplicación y deteniendo el bucle.")
+    ventana.destroy()
+    ventana.quit()
+
+ventana = tk.Tk()
+ventana.title("Combinación de quit() y destroy()")
+
+boton_cerrar = tk.Button(ventana, text="Cerrar y Detener", command=cerrar_completamente)
+boton_cerrar.pack(pady=20)
+
+ventana.mainloop()
+print("La aplicación ha sido cerrada y el bucle detenido.")
+```
+
+**Explicación:**
+
+- Al hacer clic en el botón "Cerrar y Detener", la función `cerrar_completamente()` se ejecuta, llamando primero a `ventana.destroy()` para cerrar la ventana y luego a `ventana.quit()` para detener el bucle principal.
+- Esto asegura que la aplicación se cierre completamente y que no queden procesos en ejecución.
+
+#### Consideraciones al Usar `quit()` y `destroy()`
+
+- **Evitar Uso Redundante:** No es necesario llamar a ambos métodos en la mayoría de los casos. `destroy()` ya cierra la ventana y finaliza la aplicación, por lo que `quit()` puede no ser necesario.
+- **Ventanas Emergentes:** Cuando se manejan ventanas emergentes (`Toplevel`), es preferible usar `destroy()` para cerrar la ventana específica sin afectar al resto de la aplicación.
+- **Eventos de Cierre:** Es posible enlazar eventos de cierre de la ventana (como el clic en la "X") para ejecutar funciones personalizadas que utilicen `destroy()` o `quit()`.
+
+**Ejemplo: Enlazar el evento de cierre de la ventana**
+
+```python
+import tkinter as tk
+from tkinter import messagebox
+
+def on_cerrar():
+    if messagebox.askokcancel("Salir", "¿Deseas salir de la aplicación?"):
+        ventana.destroy()
+
+ventana = tk.Tk()
+ventana.title("Evento de Cierre")
+
+ventana.protocol("WM_DELETE_WINDOW", on_cerrar)
+
+boton = tk.Button(ventana, text="Cerrar Aplicación", command=on_cerrar)
+boton.pack(pady=20)
+
+ventana.mainloop()
+```
+
+**Explicación:**
+
+- Se utiliza `ventana.protocol("WM_DELETE_WINDOW", on_cerrar)` para enlazar el evento de cierre de la ventana con la función `on_cerrar()`.
+- Al intentar cerrar la ventana (ya sea haciendo clic en el botón o en la "X"), se muestra un cuadro de diálogo de confirmación.
+- Si el usuario confirma, se llama a `ventana.destroy()` para cerrar la aplicación.
+
+---
 ## 4. Gestión de imágenes en Tkinter
 
 Tkinter permite mostrar imágenes en las interfaces gráficas. Para manejar formatos más avanzados, se suele utilizar la biblioteca Pillow.
@@ -594,243 +723,6 @@ if __name__ == "__main__":
 - **Comunicación entre componentes:** El controlador debe gestionar la comunicación entre el modelo y la vista.
 - **Actualización de la vista:** Cuando el modelo cambia, la vista debe actualizarse para reflejar los nuevos datos.
 - **Eventos en la vista:** La vista no debe contener lógica de negocio; solo debe manejar la presentación y capturar eventos.
-
----
-
-# Conclusión
-
-Estos apuntes cubren aspectos fundamentales y avanzados de la manipulación de archivos y manejo de excepciones en Python, así como conceptos ampliados de Tkinter, incluyendo manejo de eventos, ventanas emergentes, gestión de imágenes y la implementación del patrón MVC. Cada sección incluye ejemplos prácticos para facilitar la comprensión y aplicación de los conceptos en proyectos reales.
-
-Si tienes alguna duda o necesitas más detalles sobre algún tema en particular, no dudes en preguntar.
-
-## 3. Tkinter: Ampliación de Conceptos
-
-
-
-### Uso de `quit` y `destroy` en Tkinter
-
-En Tkinter, es esencial manejar correctamente el cierre de la aplicación y de los widgets individuales para liberar recursos y asegurar que la aplicación finalice de manera adecuada. `quit` y `destroy` son dos métodos clave utilizados para este propósito, pero tienen diferencias importantes en su funcionamiento.
-
-#### Método `quit()`
-
-- **Descripción:** El método `quit()` detiene el bucle principal de Tkinter (`mainloop()`), pero no destruye las ventanas ni widgets creados. La aplicación sigue en memoria y se puede reiniciar el bucle principal si es necesario.
-- **Uso Común:** Se utiliza para detener la ejecución de la aplicación sin necesariamente cerrar las ventanas. Puede ser útil en escenarios donde se necesita pausar o terminar el bucle principal temporalmente.
-
-**Ejemplo: Uso de `quit()` para detener el bucle principal**
-
-```python
-import tkinter as tk
-
-def detener_bucle():
-    print("Deteniendo el bucle principal.")
-    ventana.quit()
-
-ventana = tk.Tk()
-ventana.title("Uso de quit()")
-
-boton_quit = tk.Button(ventana, text="Detener Bucle", command=detener_bucle)
-boton_quit.pack(pady=20)
-
-ventana.mainloop()
-print("El bucle principal ha sido detenido.")
-```
-
-**Explicación:**
-
-- Al hacer clic en el botón "Detener Bucle", se llama a la función `detener_bucle()`, que imprime un mensaje y llama a `ventana.quit()`.
-- Esto detiene el bucle principal, permitiendo que el programa continúe después de `mainloop()`.
-
-#### Método `destroy()`
-
-- **Descripción:** El método `destroy()` elimina la ventana y todos sus widgets asociados, liberando los recursos utilizados. Una vez llamado, la ventana ya no existe en memoria.
-- **Uso Común:** Se utiliza para cerrar completamente la aplicación o ventanas emergentes específicas.
-
-**Ejemplo: Uso de `destroy()` para cerrar la aplicación**
-
-```python
-import tkinter as tk
-
-def cerrar_aplicacion():
-    print("Cerrando la aplicación.")
-    ventana.destroy()
-
-ventana = tk.Tk()
-ventana.title("Uso de destroy()")
-
-boton_cerrar = tk.Button(ventana, text="Cerrar Aplicación", command=cerrar_aplicacion)
-boton_cerrar.pack(pady=20)
-
-ventana.mainloop()
-print("La aplicación ha sido cerrada.")
-```
-
-**Explicación:**
-
-- Al hacer clic en el botón "Cerrar Aplicación", se llama a la función `cerrar_aplicacion()`, que imprime un mensaje y llama a `ventana.destroy()`.
-- Esto cierra completamente la ventana y termina la aplicación.
-
-#### Diferencias Clave entre `quit()` y `destroy()`
-
-| Método  | Efecto Principal | Persistencia de la Ventana |
-|---------|-------------------|-----------------------------|
-| `quit()` | Detiene el bucle principal (`mainloop()`) | La ventana sigue existiendo y puede ser manipulada nuevamente |
-| `destroy()` | Elimina la ventana y todos sus widgets | La ventana ya no existe en memoria |
-
-#### Ejemplo Combinado: Uso de `quit()` y `destroy()`
-
-A veces, es útil combinar ambos métodos para controlar de manera más precisa el cierre de la aplicación.
-
-```python
-import tkinter as tk
-
-def cerrar_y_detener():
-    print("Cerrando la aplicación y deteniendo el bucle.")
-    ventana.destroy()
-    ventana.quit()
-
-ventana = tk.Tk()
-ventana.title("Combinación de quit() y destroy()")
-
-boton_combinar = tk.Button(ventana, text="Cerrar y Detener", command=cerrar_y_detener)
-boton_combinar.pack(pady=20)
-
-ventana.mainloop()
-print("La aplicación ha sido cerrada y el bucle detenido.")
-```
-
-**Explicación:**
-
-- Al hacer clic en el botón "Cerrar y Detener", se llama a `cerrar_y_detener()`, que primero destruye la ventana y luego detiene el bucle principal.
-- Esto asegura que la aplicación finalice completamente y que el bucle no se quede en ejecución.
-
-### Uso de `quit` y `destroy` en Tkinter
-
-En aplicaciones Tkinter, es importante gestionar correctamente el cierre de ventanas y la terminación del bucle principal. Los métodos `quit()` y `destroy()` son fundamentales para este propósito, pero tienen comportamientos distintos que es crucial entender para utilizarlos de manera efectiva.
-
-#### Método `quit()`
-
-- **Descripción:** `quit()` detiene el bucle principal de Tkinter (`mainloop()`), pero no cierra la ventana ni destruye los widgets.
-- **Uso Común:** Se utiliza para detener la ejecución de la aplicación sin cerrar la ventana. Es útil cuando se desea pausar la interfaz o realizar operaciones adicionales después de detener el bucle.
-
-**Ejemplo: Uso de `quit()` para detener el bucle principal**
-
-```python
-import tkinter as tk
-
-def detener_bucle():
-    print("Deteniendo el bucle principal.")
-    ventana.quit()
-
-ventana = tk.Tk()
-ventana.title("Uso de quit()")
-
-boton_quit = tk.Button(ventana, text="Detener Bucle", command=detener_bucle)
-boton_quit.pack(pady=20)
-
-ventana.mainloop()
-print("El bucle principal ha sido detenido.")
-```
-
-**Explicación:**
-
-- Al hacer clic en el botón "Detener Bucle", la función `detener_bucle()` se ejecuta, llamando a `ventana.quit()`.
-- Esto detiene el `mainloop()`, pero la ventana permanece abierta hasta que se cierre manualmente.
-
-#### Método `destroy()`
-
-- **Descripción:** `destroy()` cierra la ventana y elimina todos los widgets asociados, liberando los recursos utilizados por Tkinter.
-- **Uso Común:** Se utiliza para cerrar completamente la aplicación o una ventana específica, como una ventana emergente.
-
-**Ejemplo: Uso de `destroy()` para cerrar la aplicación**
-
-```python
-import tkinter as tk
-
-def cerrar_aplicacion():
-    print("Cerrando la aplicación.")
-    ventana.destroy()
-
-ventana = tk.Tk()
-ventana.title("Uso de destroy()")
-
-boton_cerrar = tk.Button(ventana, text="Cerrar Aplicación", command=cerrar_aplicacion)
-boton_cerrar.pack(pady=20)
-
-ventana.mainloop()
-print("La aplicación ha sido cerrada.")
-```
-
-**Explicación:**
-
-- Al hacer clic en el botón "Cerrar Aplicación", la función `cerrar_aplicacion()` se ejecuta, llamando a `ventana.destroy()`.
-- Esto cierra completamente la ventana y finaliza la aplicación.
-
-#### Diferencias entre `quit()` y `destroy()`
-
-| Método   | Acción Principal                                         | Persistencia de la Ventana        |
-|----------|----------------------------------------------------------|------------------------------------|
-| `quit()` | Detiene el bucle principal (`mainloop()`)                | La ventana sigue existiendo        |
-| `destroy()` | Cierra la ventana y elimina todos sus widgets          | La ventana deja de existir         |
-
-#### Ejemplo Combinado: Uso de `quit()` y `destroy()`
-
-En algunos casos, puede ser necesario utilizar ambos métodos para asegurarse de que la aplicación se cierre correctamente.
-
-```python
-import tkinter as tk
-
-def cerrar_completamente():
-    print("Cerrando la aplicación y deteniendo el bucle.")
-    ventana.destroy()
-    ventana.quit()
-
-ventana = tk.Tk()
-ventana.title("Combinación de quit() y destroy()")
-
-boton_cerrar = tk.Button(ventana, text="Cerrar y Detener", command=cerrar_completamente)
-boton_cerrar.pack(pady=20)
-
-ventana.mainloop()
-print("La aplicación ha sido cerrada y el bucle detenido.")
-```
-
-**Explicación:**
-
-- Al hacer clic en el botón "Cerrar y Detener", la función `cerrar_completamente()` se ejecuta, llamando primero a `ventana.destroy()` para cerrar la ventana y luego a `ventana.quit()` para detener el bucle principal.
-- Esto asegura que la aplicación se cierre completamente y que no queden procesos en ejecución.
-
-#### Consideraciones al Usar `quit()` y `destroy()`
-
-- **Evitar Uso Redundante:** No es necesario llamar a ambos métodos en la mayoría de los casos. `destroy()` ya cierra la ventana y finaliza la aplicación, por lo que `quit()` puede no ser necesario.
-- **Ventanas Emergentes:** Cuando se manejan ventanas emergentes (`Toplevel`), es preferible usar `destroy()` para cerrar la ventana específica sin afectar al resto de la aplicación.
-- **Eventos de Cierre:** Es posible enlazar eventos de cierre de la ventana (como el clic en la "X") para ejecutar funciones personalizadas que utilicen `destroy()` o `quit()`.
-
-**Ejemplo: Enlazar el evento de cierre de la ventana**
-
-```python
-import tkinter as tk
-from tkinter import messagebox
-
-def on_cerrar():
-    if messagebox.askokcancel("Salir", "¿Deseas salir de la aplicación?"):
-        ventana.destroy()
-
-ventana = tk.Tk()
-ventana.title("Evento de Cierre")
-
-ventana.protocol("WM_DELETE_WINDOW", on_cerrar)
-
-boton = tk.Button(ventana, text="Cerrar Aplicación", command=on_cerrar)
-boton.pack(pady=20)
-
-ventana.mainloop()
-```
-
-**Explicación:**
-
-- Se utiliza `ventana.protocol("WM_DELETE_WINDOW", on_cerrar)` para enlazar el evento de cierre de la ventana con la función `on_cerrar()`.
-- Al intentar cerrar la ventana (ya sea haciendo clic en el botón o en la "X"), se muestra un cuadro de diálogo de confirmación.
-- Si el usuario confirma, se llama a `ventana.destroy()` para cerrar la aplicación.
 
 ---
 
