@@ -12,7 +12,6 @@ Vas a desarrollar una aplicación de gestión de notas con Tkinter, que permita 
      - **Entry**: Para que el usuario escriba una nueva nota.
      - **Button**: Para agregar notas, eliminar notas, guardar notas en un archivo, cargar notas desde un archivo y descargar una imagen desde GitHub.
      - **Label**: Para mostrar la imagen descargada desde GitHub.
-   - Se debe capturar el clic del ratón en cualquier parte de la ventana, excepto en los botones, utilizando `bind`.
 
 2. **Modelo (Manejo de datos)**:
    - Crearás una clase `NotasModel` que gestionará la lógica de las notas:
@@ -72,8 +71,6 @@ Vas a desarrollar una aplicación de gestión de notas con Tkinter, que permita 
   - **`Button`**:
     - Botones para agregar, eliminar, guardar, cargar notas, y descargar una imagen.
     - Cada botón estará asociado a una función del controlador mediante la opción `command`.
-  - **`bind("<Button-1>", función)`**:
-    - Enlaza el evento del clic izquierdo del ratón fuera de los botones para capturar las coordenadas del clic.
   - **`Label`** (para la imagen):
     - Este `Label` será donde se mostrará la imagen descargada desde GitHub.
 
