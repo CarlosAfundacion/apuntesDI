@@ -82,7 +82,7 @@ with open('salida.txt', 'w') as archivo:
 
 ### Modos de Apertura
 
-| Modo | Descripción |
+| Modo | Descripción |quit
 |------|-------------|
 | `'r'` | Lectura (por defecto). El archivo debe existir. |
 | `'w'` | Escritura. Crea un archivo nuevo o sobrescribe uno existente. |
@@ -377,7 +377,7 @@ En aplicaciones Tkinter, es importante gestionar correctamente el cierre de vent
 
 #### Método `quit()`
 
-- **Descripción:** `quit()` detiene el bucle principal de Tkinter (`mainloop()`), pero no cierra la ventana ni destruye los widgets.
+- **Descripción:** `quit()` detiene el bucle principal de Tkinter (`mainloop()`), la ventana deja devisualizarse pero no elimina la ventana y sus widgets de memoria. Esto implica que se podría seguir ejecutando código una vez que hayamos usado este método. Por ejemplo podríamos programar el guardado de información automático a continuación de que usemos el método `quit()`.
 - **Uso Común:** Se utiliza para detener la ejecución de la aplicación sin cerrar la ventana. Es útil cuando se desea pausar la interfaz o realizar operaciones adicionales después de detener el bucle.
 
 **Ejemplo: Uso de `quit()` para detener el bucle principal**
@@ -437,7 +437,7 @@ print("La aplicación ha sido cerrada.")
 
 | Método   | Acción Principal                                         | Persistencia de la Ventana        |
 |----------|----------------------------------------------------------|------------------------------------|
-| `quit()` | Detiene el bucle principal (`mainloop()`)                | La ventana sigue existiendo        |
+| `quit()` | Detiene el bucle principal (`mainloop()`)                | La ventana sigue existiendo pero no se visualiza      |
 | `destroy()` | Cierra la ventana y elimina todos sus widgets          | La ventana deja de existir         |
 
 #### Ejemplo Combinado: Uso de `quit()` y `destroy()`
@@ -469,7 +469,7 @@ print("La aplicación ha sido cerrada y el bucle detenido.")
 
 #### Consideraciones al usar `quit()` y `destroy()`
 
-- **Evitar rso Redundante:** No es necesario llamar a ambos métodos en la mayoría de los casos. `destroy()` ya cierra la ventana y finaliza la aplicación, por lo que `quit()` puede no ser necesario.
+- **Evitar uso Redundante:** No es necesario llamar a ambos métodos en la mayoría de los casos. `destroy()` ya cierra la ventana y finaliza la aplicación, por lo que `quit()` puede no ser necesario.
 - **Ventanas emergentes:** Cuando se manejan ventanas emergentes (`Toplevel`), es preferible usar `destroy()` para cerrar la ventana específica sin afectar al resto de la aplicación.
 - **Eventos de cierre:** Es posible enlazar eventos de cierre de la ventana (como el clic en la "X") para ejecutar funciones personalizadas que utilicen `destroy()` o `quit()`.
 
@@ -521,7 +521,7 @@ Las funciones lambda son una característica poderosa de Python que permiten def
   - Devuelve el valor de la expresión.
   - No puede contener declaraciones ni anotaciones complejas.
 
-**Ejemplo Básico:**
+**Ejemplo básico:**
 
 ```python
 # Función normal
@@ -535,7 +535,7 @@ print(suma(3, 5))        # Salida: 8
 print(suma_lambda(3, 5)) # Salida: 8
 ```
 
-#### Ventajas de Usar Funciones Lambda
+#### Ventajas de usar funciones Lambda
 
 - **Concisión:** Permite escribir funciones pequeñas en una sola línea.
 - **Flexibilidad:** Útil para operaciones rápidas y temporales.
@@ -626,7 +626,7 @@ ventana.mainloop()
 
 Además de los comandos de botones, las funciones lambda pueden utilizarse con métodos de binding para manejar eventos.
 
-**Ejemplo: Capturar Movimiento del Ratón con Coordenadas**
+**Ejemplo: Capturar movimiento del ratón con coordenadas**
 
 ```python
 import tkinter as tk
@@ -789,7 +789,7 @@ ventana.mainloop()
 
 **Explicación:**
 
-- **Redimensionar:** `imagen.resize((200, 200), Image.ANTIALIAS)` cambia el tamaño de la imagen a 200x200 píxeles con antialiasing para suavizar la imagen.
+- **Redimensionar:** `imagen.resize((200, 200), Image.Reasmplig.LANCZOS)` cambia el tamaño de la imagen a 200x200 píxeles con antialiasing para suavizar la imagen.
 - **Mostrar:** La imagen redimensionada se muestra en un widget `Label`.
 
 #### Rotar y girar Imágenes
