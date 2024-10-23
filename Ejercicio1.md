@@ -29,7 +29,7 @@ Vas a desarrollar una aplicación de gestión de notas con Tkinter, que permita 
      - **Método `cargar_notas()`**: Carga las notas desde el archivo de texto y actualiza la vista.
      - **Método `descargar_imagen()`**: Descarga la imagen desde GitHub en un hilo separado para no congelar la interfaz gráfica.
      - **Método `actualizar_coordenadas(event)`**: Captura las coordenadas del clic del ratón fuera de los botones y actualiza un `Label` en la vista.
-     - **Método `actualizar_listbox(event)`**: Refresca la visualización del listbox de la vista con las notas del modelo en el momento actual.
+     - **Método `actualizar_listbox()`**: Refresca la visualización del listbox de la vista con las notas del modelo en el momento actual.
 
 4. **Descarga de imagen desde GitHub utilizando hilos**:
    - Debes usar la biblioteca `threading` para realizar la descarga de la imagen en un hilo separado y así evitar que la interfaz gráfica se congele durante la descarga.
