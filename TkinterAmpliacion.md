@@ -775,7 +775,7 @@ ventana.title("Redimensionar Imagen")
 imagen = Image.open('ruta/a/tu/imagen.jpg')
 
 # Redimensionar la imagen a 200x200 píxeles
-imagen_redimensionada = imagen.resize((200, 200), Image.ANTIALIAS)
+imagen_redimensionada = imagen.resize((200, 200), Image.Resampling.LANCZOS)
 
 # Convertir para Tkinter
 imagen_tk = ImageTk.PhotoImage(imagen_redimensionada)
