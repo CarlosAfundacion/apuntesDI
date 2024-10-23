@@ -1,4 +1,4 @@
-# Apuntes Completos sobre Python y Tkinter
+# Ampliación Python y Tkinter
 
 ## Índice
 
@@ -467,11 +467,11 @@ print("La aplicación ha sido cerrada y el bucle detenido.")
 - Al hacer clic en el botón "Cerrar y Detener", la función `cerrar_completamente()` se ejecuta, llamando primero a `ventana.destroy()` para cerrar la ventana y luego a `ventana.quit()` para detener el bucle principal.
 - Esto asegura que la aplicación se cierre completamente y que no queden procesos en ejecución.
 
-#### Consideraciones al Usar `quit()` y `destroy()`
+#### Consideraciones al usar `quit()` y `destroy()`
 
-- **Evitar Uso Redundante:** No es necesario llamar a ambos métodos en la mayoría de los casos. `destroy()` ya cierra la ventana y finaliza la aplicación, por lo que `quit()` puede no ser necesario.
-- **Ventanas Emergentes:** Cuando se manejan ventanas emergentes (`Toplevel`), es preferible usar `destroy()` para cerrar la ventana específica sin afectar al resto de la aplicación.
-- **Eventos de Cierre:** Es posible enlazar eventos de cierre de la ventana (como el clic en la "X") para ejecutar funciones personalizadas que utilicen `destroy()` o `quit()`.
+- **Evitar rso Redundante:** No es necesario llamar a ambos métodos en la mayoría de los casos. `destroy()` ya cierra la ventana y finaliza la aplicación, por lo que `quit()` puede no ser necesario.
+- **Ventanas emergentes:** Cuando se manejan ventanas emergentes (`Toplevel`), es preferible usar `destroy()` para cerrar la ventana específica sin afectar al resto de la aplicación.
+- **Eventos de cierre:** Es posible enlazar eventos de cierre de la ventana (como el clic en la "X") para ejecutar funciones personalizadas que utilicen `destroy()` o `quit()`.
 
 **Ejemplo: Enlazar el evento de cierre de la ventana**
 
@@ -501,13 +501,13 @@ ventana.mainloop()
 - Si el usuario confirma, se llama a `ventana.destroy()` para cerrar la aplicación.
 
 ---
-## 4. Funciones Lambda en Python y su Aplicación en Tkinter
+## 4. Funciones lambda en Python y su aplicación en Tkinter
 
 Las funciones lambda son una característica poderosa de Python que permiten definir funciones pequeñas y anónimas en una sola línea. En Tkinter, las funciones lambda son especialmente útiles para manejar callbacks y pasar argumentos a las funciones asociadas a eventos o comandos de widgets.
 
-### Funciones Lambda en Python
+### Funciones lambda en Python
 
-#### Definición y Sintaxis
+#### Definición y sintaxis
 
 - **Definición:** Una función lambda es una función anónima que se define utilizando la palabra clave `lambda`. Se puede utilizar para crear funciones pequeñas y concisas sin la necesidad de definir una función completa con `def`.
 - **Sintaxis:**
@@ -539,7 +539,7 @@ print(suma_lambda(3, 5)) # Salida: 8
 
 - **Concisión:** Permite escribir funciones pequeñas en una sola línea.
 - **Flexibilidad:** Útil para operaciones rápidas y temporales.
-- **Integración con Funciones de Orden Superior:** Funciona bien con funciones como `map()`, `filter()`, y `sorted()`.
+- **Integración con funciones de orden superior:** Funciona bien con funciones como `map()`, `filter()`, y `sorted()`.
 
 **Ejemplo con `map()`:**
 
@@ -549,18 +549,18 @@ cuadrados = list(map(lambda x: x**2, numeros))
 print(cuadrados) # Salida: [1, 4, 9, 16, 25]
 ```
 
-### Aplicación de Funciones Lambda en Tkinter
+### Aplicación de funciones lambda en Tkinter
 
 En Tkinter, las funciones lambda son comúnmente utilizadas para:
 
-- **Pasar Argumentos a Callbacks:** Cuando un widget requiere una función de callback que acepta argumentos.
-- **Simplificar el Código:** Reducir la necesidad de definir múltiples funciones pequeñas para manejar eventos.
+- **Pasar Argumentos a callbacks:** Cuando un widget requiere una función de callback que acepta argumentos.
+- **Simplificar el código:** Reducir la necesidad de definir múltiples funciones pequeñas para manejar eventos.
 
-#### Pasar Argumentos a Callbacks
+#### Pasar argumentos a callbacks
 
 Cuando se asocia una función a un evento o comando de un widget, a menudo es necesario pasar argumentos a esa función. Sin las funciones lambda, esto podría requerir la definición de múltiples funciones. Las lambdas simplifican este proceso.
 
-**Ejemplo: Botones que Imprimen Diferentes Mensajes**
+**Ejemplo: Botones que imprimen diferentes mensajes**
 
 ```python
 import tkinter as tk
@@ -592,11 +592,11 @@ ventana.mainloop()
 - Cada botón utiliza una función lambda para pasar un mensaje diferente a la función `mostrar_mensaje()`.
 - Esto evita la necesidad de definir múltiples funciones separadas para cada mensaje.
 
-#### Asociar Eventos con Funciones Lambda
+#### Asociar eventos con funciones lambda
 
 Las lambdas también son útiles para manejar eventos donde se requieren argumentos adicionales.
 
-**Ejemplo: Clic en Botones con Identificadores**
+**Ejemplo: Clic en botones con identificadores**
 
 ```python
 import tkinter as tk
@@ -648,26 +648,26 @@ ventana.mainloop()
 - Se enlaza el evento `<Motion>` (movimiento del ratón) con una función lambda que extrae las coordenadas `event.x` y `event.y` y las pasa a `mostrar_coordenadas()`.
 - Esto permite manejar el evento sin definir una función separada para el callback.
 
-#### Ventajas y Desventajas de Usar Lambdas en Tkinter
+#### Ventajas y desventajas de usar lambdas en Tkinter
 
 **Ventajas:**
 
-- **Código Más Limpio y Conciso:** Evita la necesidad de definir múltiples funciones pequeñas.
-- **Flexibilidad en Callbacks:** Permite pasar argumentos fácilmente a las funciones de callback.
-- **Mejora la Legibilidad:** Al mantener las funciones de manejo de eventos cerca de la definición del widget.
+- **Código más limpio y conciso:** Evita la necesidad de definir múltiples funciones pequeñas.
+- **Flexibilidad en callbacks:** Permite pasar argumentos fácilmente a las funciones de callback.
+- **Mejora la legibilidad:** Al mantener las funciones de manejo de eventos cerca de la definición del widget.
 
 **Desventajas:**
 
-- **Complejidad en Lambdas Grandes:** Las lambdas deben mantenerse simples; funciones complejas deben definirse con `def`.
-- **Depuración Difícil:** Las funciones lambda pueden ser más difíciles de depurar debido a su naturaleza anónima.
+- **Complejidad en lambdas grandes:** Las lambdas deben mantenerse simples; funciones complejas deben definirse con `def`.
+- **Depuración difícil:** Las funciones lambda pueden ser más difíciles de depurar debido a su naturaleza anónima.
 
-**Buenas Prácticas:**
+**Buenas prácticas:**
 
-- **Mantener Lambdas Simples:** Usar lambdas para operaciones pequeñas y definir funciones completas para lógica más compleja.
-- **Evitar Exceso de Uso:** No abusar de las lambdas; usarlas donde aporten claridad y simplicidad.
-- **Documentación Adecuada:** Aunque las lambdas son concisas, asegurar que el propósito de cada lambda sea claro para otros desarrolladores.
+- **Mantener lambdas simples:** Usar lambdas para operaciones pequeñas y definir funciones completas para lógica más compleja.
+- **Evitar exceso de uso:** No abusar de las lambdas; usarlas donde aporten claridad y simplicidad.
+- **Documentación adecuada:** Aunque las lambdas son concisas, asegurar que el propósito de cada lambda sea claro para otros desarrolladores.
 
-#### Ejemplo Avanzado: Uso de Lambda para Actualizar Widgets
+#### Ejemplo avanzado: Uso de lambda para actualizar widgets
 
 Supongamos que queremos actualizar múltiples etiquetas con diferentes textos al presionar diferentes botones. Usar lambdas simplifica la asignación de comandos a cada botón.
 
@@ -714,7 +714,7 @@ ventana.mainloop()
 
 ---
 
-## 5. Gestión de Imágenes en Tkinter
+## 5. Gestión de imágenes en Tkinter
 
 Tkinter proporciona funcionalidades básicas para manejar y mostrar imágenes en las interfaces gráficas. Sin embargo, para trabajar con formatos más avanzados y realizar operaciones de procesamiento de imágenes, es común utilizar la biblioteca Pillow (PIL Fork). Además, cargar imágenes desde fuentes externas, como GitHub, y manejar tareas que consumen tiempo, como la descarga de imágenes, puede requerir el uso de hilos para mantener la interfaz responsiva.
 
@@ -728,9 +728,9 @@ Pillow es una biblioteca de procesamiento de imágenes en Python que extiende la
 pip install Pillow
 ```
 
-#### Cargar y Mostrar una Imagen con Pillow
+#### Cargar y mostrar una imagen con Pillow
 
-**Ejemplo Básico: Mostrar una Imagen en una Ventana Tkinter**
+**Ejemplo básico: mostrar una imagen en una ventana Tkinter**
 
 ```python
 import tkinter as tk
@@ -754,15 +754,15 @@ ventana.mainloop()
 
 **Explicación:**
 
-- **Cargar la Imagen:** `Image.open('ruta/a/tu/imagen.jpg')` abre la imagen utilizando Pillow.
+- **Cargar la imagen:** `Image.open('ruta/a/tu/imagen.jpg')` abre la imagen utilizando Pillow.
 - **Convertir para Tkinter:** `ImageTk.PhotoImage(imagen)` convierte la imagen al formato compatible con Tkinter.
-- **Mostrar la Imagen:** Se crea un widget `Label` que contiene la imagen y se empaqueta en la ventana.
+- **Mostrar la imagen:** Se crea un widget `Label` que contiene la imagen y se empaqueta en la ventana.
 
-#### Redimensionar Imágenes
+#### Redimensionar imágenes
 
 A menudo, es necesario ajustar el tamaño de las imágenes para que se adapten a la interfaz.
 
-**Ejemplo: Redimensionar una Imagen**
+**Ejemplo: Redimensionar una imagen**
 
 ```python
 import tkinter as tk
@@ -792,11 +792,11 @@ ventana.mainloop()
 - **Redimensionar:** `imagen.resize((200, 200), Image.ANTIALIAS)` cambia el tamaño de la imagen a 200x200 píxeles con antialiasing para suavizar la imagen.
 - **Mostrar:** La imagen redimensionada se muestra en un widget `Label`.
 
-#### Rotar y Girar Imágenes
+#### Rotar y girar Imágenes
 
 Pillow permite realizar transformaciones como rotación y giro.
 
-**Ejemplo: Rotar una Imagen 90 Grados**
+**Ejemplo: Rotar una imagen 90 Grados**
 
 ```python
 import tkinter as tk
@@ -826,13 +826,13 @@ ventana.mainloop()
 - **Rotar:** `imagen.rotate(90, expand=True)` rota la imagen 90 grados. El parámetro `expand=True` ajusta el tamaño de la imagen para evitar recortes.
 - **Mostrar:** La imagen rotada se muestra en un widget `Label`.
 
-### Carga de Imágenes desde GitHub
+### Carga de imágenes desde gitHub
 
 Cargar imágenes directamente desde GitHub o cualquier URL implica descargar la imagen y luego procesarla para mostrarla en Tkinter. Para esto, se utilizan las bibliotecas `requests` para la descarga y `io.BytesIO` para manejar los datos de la imagen en memoria.
 
-#### Descargar y Mostrar una Imagen desde una URL
+#### Descargar y mostrar una imagen desde una URL
 
-**Ejemplo: Cargar una Imagen desde GitHub**
+**Ejemplo: Cargar una imagen desde GitHub**
 
 ```python
 import tkinter as tk
@@ -867,24 +867,24 @@ ventana.mainloop()
 
 **Explicación:**
 
-- **Descargar la Imagen:** Se utiliza `requests.get(url)` para descargar la imagen desde la URL proporcionada.
-- **Verificar Descarga:** Se comprueba si la respuesta tiene un código de estado `200` (éxito).
-- **Abrir y Mostrar:** Si la descarga es exitosa, se abre la imagen desde los bytes descargados utilizando `BytesIO` y se muestra en un widget `Label`.
-- **Manejo de Errores:** Si la descarga falla, se muestra un mensaje de error en la ventana.
+- **Descargar la imagen:** Se utiliza `requests.get(url)` para descargar la imagen desde la URL proporcionada.
+- **Verificar descarga:** Se comprueba si la respuesta tiene un código de estado `200` (éxito).
+- **Abrir y mostrar:** Si la descarga es exitosa, se abre la imagen desde los bytes descargados utilizando `BytesIO` y se muestra en un widget `Label`.
+- **Manejo de errores:** Si la descarga falla, se muestra un mensaje de error en la ventana.
 
-#### Consideraciones de Seguridad y Acceso
+#### Consideraciones de seguridad y acceso
 
-- **URLs Correctas:** Asegúrate de que la URL apunte directamente al archivo de la imagen y que sea accesible públicamente.
-- **Manejo de Errores:** Implementa manejo de excepciones para gestionar posibles fallos en la descarga o en la apertura de la imagen.
+- **URLs correctas:** Asegúrate de que la URL apunte directamente al archivo de la imagen y que sea accesible públicamente.
+- **Manejo de errores:** Implementa manejo de excepciones para gestionar posibles fallos en la descarga o en la apertura de la imagen.
 - **Autenticación:** Si la imagen está en un repositorio privado, se necesitarán métodos de autenticación adecuados para acceder a ella.
 
-### Uso de Hilos
+### Uso de hilos
 
 Cuando se realizan operaciones que consumen tiempo, como descargar imágenes desde Internet, la interfaz gráfica puede volverse no responsiva si se ejecutan en el hilo principal. Para evitar esto, se puede utilizar la biblioteca `threading` para ejecutar estas tareas en hilos separados.
 
-#### Descarga y Muestra de una Imagen en un Hilo Separado
+#### Descarga y muestra de una imagen en un hilo separado
 
-**Ejemplo: Descargar y Mostrar una Imagen sin Congelar la Interfaz**
+**Ejemplo: Descargar y mostrar una imagen sin congelar la interfaz**
 
 ```python
 import tkinter as tk
@@ -930,11 +930,11 @@ ventana.mainloop()
 - **Función `iniciar_descarga()`:** Crea y inicia un hilo que ejecuta `descargar_imagen()`. Esto asegura que la descarga no bloquea el hilo principal de la interfaz.
 - **Actualizar la Interfaz:** Aunque Tkinter no es seguro para hilos, en este caso, `etiqueta.config()` se ejecuta desde el hilo secundario. Para mayor seguridad, es preferible utilizar métodos como `after()` para programar actualizaciones en el hilo principal.
 
-#### Mejorando la Seguridad de Hilos con `after()`
+#### Mejorando la seguridad de hilos con `after()`
 
 Para asegurar que las actualizaciones de la interfaz se realicen en el hilo principal, se puede utilizar el método `after()` de Tkinter.
 
-**Ejemplo Mejorado: Uso de `after()` para Actualizar la Interfaz**
+**Ejemplo mejorado: Uso de `after()` para actualizar la interfaz**
 
 ```python
 import tkinter as tk
