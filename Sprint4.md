@@ -254,7 +254,7 @@ El `GameModel` se encarga de la lógica de negocio del juego de memoria, asegura
 2. **Pasos**:
    - Implementa la clase `MainMenu` en `vista.py` para mostrar las opciones de “Jugar”, “Estadísticas” y “Salir”.
    - Asegúrate de que cada botón está correctamente enlazado a los métodos `start_game_callback`, `show_stats_callback`, y `quit_callback` definidos en `GameController`.
-   - **ESTO NO HAY QUE HACERLO** Oculta la ventana principal de Tkinter (`root.withdraw()`) en `main.py` tras inicializar el menú.
+   - **ESTO NO HAY QUE HACERLO** ~~Oculta la ventana principal de Tkinter (`root.withdraw()`) en `main.py` tras inicializar el menú.~~
    - **Prueba**: Ejecuta `main.py` y verifica que el menú principal aparece con las opciones indicadas, y que al seleccionar "Salir" la aplicación se cierra correctamente.
 
 ---
