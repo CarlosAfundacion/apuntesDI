@@ -1,5 +1,5 @@
 # Juego de memoria
-
+Esto es una guía de implementación, no tienes por qué seguirla al pie de la letra siempre y cuando las funcionalidades de la app no varíen
 ## `main.py`
 ### Importaciones y dependencias
 
@@ -7,7 +7,7 @@
    - `tkinter as tk` proporciona acceso a la biblioteca Tkinter para construir la interfaz gráfica.
    - `GameController` (de `controlador.py`) es el controlador principal del juego, manejando la lógica entre el modelo y la vista.
    - `GameModel` (de `modelo.py`) representa el modelo de datos del juego.
-   - `MainMenu` y `GameView` (de `vista.py`) son componentes de la interfaz visual que incluyen el menú principal y la vista del juego.
+   
 
 2. **Función principal**: 
    - La lógica principal se ejecuta dentro de un bloque `if __name__ == "__main__"` para evitar que el código se ejecute al importar el archivo en otro módulo.
@@ -17,7 +17,7 @@
 1. **root (variable)**:
    - Tipo: instancia de `Tk`, proporcionada por `tkinter`
    - Uso: `root` es la ventana raíz de la aplicación Tkinter y actúa como el contenedor de todos los widgets.
-   - Configuración: `root` se inicializa y luego se oculta. Ocultar esta ventana principal es útil cuando la interfaz se basa en un menú o ventana secundaria.
+   - Configuración: `root` se inicializa.
 
 2. **model (variable)**:
    - Tipo: instancia de `GameModel`
@@ -128,7 +128,11 @@ El `GameModel` se encarga de la lógica de negocio del juego de memoria, asegura
 
 ### Clase GameView
 
-**GameView** representa la vista del juego y gestiona la interfaz del tablero, el contador de movimientos y el temporizador. Esta clase se comunica con el controlador mediante callbacks para responder a los eventos del usuario.
+**GameView**  es una ventaan **TopLevel** y representa la vista del juego y gestiona la interfaz del tablero, el contador de movimientos y el temporizador. Esta clase se comunica con el controlador mediante callbacks para responder a los eventos del usuario.  Las callbacks se utilizan para enlazar funciones que se deberían ejecutar en la parte de la vista, pero como estamos tratando de seguir un modelo vista controlador, lo que hacemos es crear una función que sólo hará una llamada de vuelta a la implementación de la misma, esta se lleva a cabo en el controlador, cuando instanciemos la clase de la vista, asociaremos esos callbacks a las funciones correctas que tenemos definidas en la clase controlador. En las siguientes imágenes podéis ver cómoo sería el constructor de las clases de la vista utilizando callbacks:
+![imagen](https://github.com/user-attachments/assets/80104444-8061-4276-8f26-689941623133)
+
+![imagen](https://github.com/user-attachments/assets/a789d2bf-0b09-40df-b955-64705e43537b)
+
 
 #### Atributos y métodos clave
 
@@ -253,7 +257,7 @@ El `GameModel` se encarga de la lógica de negocio del juego de memoria, asegura
 1. **Objetivo**: Crear el menú principal con opciones para iniciar el juego, ver estadísticas y salir.
 2. **Pasos**:
    - Implementa la clase `MainMenu` en `vista.py` para mostrar las opciones de “Jugar”, “Estadísticas” y “Salir”.
-   - Asegúrate de que cada botón está correctamente enlazado a los métodos `start_game_callback`, `show_stats_callback`, y `quit_callback` definidos en `GameController`.
+   - Asegúrate de que cada botón está correctamente enlazado a los métodos `start_game_callback`, `show_stats_callback`, y `quit_callback` definidos en `GameController`. Estas funciones pueden mostrar una ventana emergente indicando que se ha pulsado cada botón, o pueden enlazar con una función "tonta" con un pass cómo único código de ejecución
    - **ESTO NO HAY QUE HACERLO** ~~Oculta la ventana principal de Tkinter (`root.withdraw()`) en `main.py` tras inicializar el menú.~~
    - **Prueba**: Ejecuta `main.py` y verifica que el menú principal aparece con las opciones indicadas, y que al seleccionar "Salir" la aplicación se cierra correctamente.
 
@@ -263,7 +267,7 @@ El `GameModel` se encarga de la lógica de negocio del juego de memoria, asegura
 
 1. **Objetivo**: Implementar la funcionalidad para pedir la dificultad y el nombre del jugador antes de empezar la partida.
 2. **Pasos**:
-   - En `GameController`, implementa el método `show_difficulty_selection`, que solicita al jugador la dificultad mediante un cuadro de diálogo. Asegúrate de que solo se aceptan opciones válidas: “facil”, “medio” y “dificil”.
+   - En `GameController`, implementa el método `show_difficulty_selection`, que solicita al jugador la dificultad mediante un cuadro de diálogo (Puedes usar ´simpledialog.askstring(Título, texto, widget padre)´. Si ya lo has implementado de otra forma, no hay problema. Asegúrate de que solo se aceptan opciones válidas: “facil”, “medio” y “dificil”.
    - Si la dificultad es válida, solicita el nombre del jugador usando el método `ask_player_name` de `MainMenu` y almacénalo en `self.player_name`.
    - **Prueba**: Ejecuta la aplicación, selecciona “Jugar” en el menú principal y verifica que solicita la dificultad y el nombre. El menú principal debe permanecer abierto tras realizar estos pasos.
 
