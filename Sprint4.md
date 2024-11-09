@@ -312,7 +312,7 @@ El `GameModel` se encarga de la lógica de negocio del juego de memoria, asegura
    - Implementa el método `save_score` en `GameModel` para guardar la puntuación del jugador:
      - Registra el nombre, dificultad, número de movimientos y fecha en `ranking.txt`.
      - Ordena las puntuaciones de cada dificultad y almacena solo las tres mejores en el archivo.
-   - En `load_scores`, carga las puntuaciones desde `ranking.txt` y devuelve un diccionario con las puntuaciones por dificultad.
+   - En `load_scores`, carga las puntuaciones desde `ranking.txt` y devuelve un diccionario con las puntuaciones por dificultad. Para que las estadísticas se puedan cargar al iniciar la aplicación, tenemos que modificar el constructor del controlador en `main.py` pasándole el modelo.
    - En `MainMenu`, implementa `show_stats`, que crea una ventana emergente con el ranking de puntuaciones por dificultad.
      - Asegúrate de que las estadísticas se ordenan y muestran con el formato correcto.
    - **Prueba**: Completa el juego y verifica que la puntuación se guarda correctamente en `ranking.txt`. Abre la sección de “Estadísticas” en el menú principal y asegúrate de que las puntuaciones se muestran en orden.
