@@ -267,7 +267,7 @@ El `GameModel` se encarga de la lógica de negocio del juego de memoria, asegura
 
 1. **Objetivo**: Implementar la funcionalidad para pedir la dificultad y el nombre del jugador antes de empezar la partida.
 2. **Pasos**:
-   - En `GameController`, implementa el método `show_difficulty_selection`, que solicita al jugador la dificultad mediante un cuadro de diálogo (Puedes usar ´simpledialog.askstring(Título, texto, widget padre)´. Si ya lo has implementado de otra forma, no hay problema. Asegúrate de que solo se aceptan opciones válidas: “facil”, “medio” y “dificil”.
+   - En `GameController`, implementa el método `show_difficulty_selection`, que solicita al jugador la dificultad mediante un cuadro de diálogo (Puedes usar `simpledialog.askstring(Título, texto, widget padre)`). Si ya lo has implementado de otra forma, no hay problema. Asegúrate de que solo se aceptan opciones válidas: “facil”, “medio” y “dificil”.
    - Si la dificultad es válida, solicita el nombre del jugador usando el método `ask_player_name` de `MainMenu` y almacénalo en `self.player_name`.
    - **Prueba**: Ejecuta la aplicación, selecciona “Jugar” en el menú principal y verifica que solicita la dificultad y el nombre. El menú principal debe permanecer abierto tras realizar estos pasos.
 
