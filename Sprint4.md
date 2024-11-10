@@ -77,7 +77,7 @@ Esta función es fundamental en la aplicación para obtener las imágenes del ta
 
 ### Importaciones y dependencias
 
-1. **threading**: permite la creación y gestión de hilos, que se utiliza en este archivo para cargar las imágenes en segundo plano, optimizando la carga inicial del juego. Puedes consultar más información sobre su implementación en este [enlace:](hilosSprint%234.md) 
+1. **threading**: permite la creación y gestión de hilos, que se utiliza en este archivo para cargar las imágenes en segundo plano, optimizando la carga inicial del juego. 
    
 2. **time**: proporciona acceso a funciones relacionadas con el tiempo, como `time()` para capturar el tiempo en segundos. Aquí, se usa para calcular la duración de la partida.
    
@@ -101,7 +101,7 @@ Esta función es fundamental en la aplicación para obtener las imágenes del ta
 
 2. **Métodos privados**:
    - **`_generate_board(self)`**: genera el tablero del juego creando un conjunto de pares de identificadores de imágenes y los mezcla aleatoriamente. Esto asegura que cada partida tenga una distribución distinta de las cartas.
-   - **`_load_images(self)`**: inicia un hilo separado para descargar y cargar las imágenes necesarias desde una URL base. La imagen oculta se asigna a `hidden_image` y cada identificador de carta se asigna a una imagen descargada específica. Se utiliza un hilo para evitar demoras en la interfaz del usuario durante la carga.
+   - **`_load_images(self)`**: inicia un hilo separado para descargar y cargar las imágenes necesarias desde una URL base. La imagen oculta se asigna a `hidden_image` y cada identificador de carta se asigna a una imagen descargada específica. Se utiliza un hilo para evitar demoras en la interfaz del usuario durante la carga. Puedes consultar más información sobre su implementación en este [enlace:](hilosSprint%234.md) 
 
 3. **Métodos públicos**:
    - **`images_are_loaded(self)`**: verifica si todas las imágenes del juego han sido cargadas. Devuelve un valor booleano que indica si el evento `images_loaded` ha sido activado, indicando que las imágenes están listas.
@@ -283,6 +283,7 @@ El `GameModel` se encarga de la lógica de negocio del juego de memoria, asegura
      - Asegúrate de que el evento `self.images_loaded` se establece una vez que todas las imágenes están descargadas.
    - En `GameController`, crea el método `show_loading_window` para mostrar una ventana de carga mientras las imágenes se descargan.
    - Una vez descargadas las imágenes (`images_are_loaded` es verdadero), destruye la ventana de carga y llama a `GameView.create_board` para mostrar el tablero.
+     Puedes consultar más información sobre su implementación en este [enlace:](hilosSprint%234.md) 
    - **Prueba**: Ejecuta la aplicación, selecciona la dificultad y el nombre. Verifica que se muestra la ventana de carga y que, después, se abre el tablero con las cartas ocultas.
 
 ---
