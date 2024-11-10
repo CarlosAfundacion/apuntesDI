@@ -276,6 +276,7 @@ El `GameModel` se encarga de la lógica de negocio del juego de memoria, asegura
 ### Fase 3: Creación del tablero y carga de imágenes
 
 1. **Objetivo**: Crear el tablero de juego y descargar las imágenes necesarias para las cartas, asegurando que solo se muestra el tablero una vez que todas las imágenes están disponibles.
+Puedes consultar más información sobre su implementación en este [enlace:](hilosSprint%234.md) 
 2. **Pasos**:
    - En el modelo (`GameModel` en `modelo.py`), utiliza `_generate_board` para generar el tablero con posiciones aleatorias de cartas, basadas en la dificultad seleccionada.
    - Implementa el método `_load_images`, que usa `descargar_imagen` de `recursos.py` para descargar la imagen oculta y las cartas desde GitHub.
@@ -283,7 +284,6 @@ El `GameModel` se encarga de la lógica de negocio del juego de memoria, asegura
      - Asegúrate de que el evento `self.images_loaded` se establece una vez que todas las imágenes están descargadas.
    - En `GameController`, crea el método `show_loading_window` para mostrar una ventana de carga mientras las imágenes se descargan.
    - Una vez descargadas las imágenes (`images_are_loaded` es verdadero), destruye la ventana de carga y llama a `GameView.create_board` para mostrar el tablero.
-     Puedes consultar más información sobre su implementación en este [enlace:](hilosSprint%234.md) 
    - **Prueba**: Ejecuta la aplicación, selecciona la dificultad y el nombre. Verifica que se muestra la ventana de carga y que, después, se abre el tablero con las cartas ocultas.
 
 ---
