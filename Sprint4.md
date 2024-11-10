@@ -77,7 +77,7 @@ Esta función es fundamental en la aplicación para obtener las imágenes del ta
 
 ### Importaciones y dependencias
 
-1. **threading**: permite la creación y gestión de hilos, que se utiliza en este archivo para cargar las imágenes en segundo plano, optimizando la carga inicial del juego.
+1. **threading**: permite la creación y gestión de hilos, que se utiliza en este archivo para cargar las imágenes en segundo plano, optimizando la carga inicial del juego. Puedes consultar más información sobre su implementación en este [enlace:](hilosSprint%234.md) 
    
 2. **time**: proporciona acceso a funciones relacionadas con el tiempo, como `time()` para capturar el tiempo en segundos. Aquí, se usa para calcular la duración de la partida.
    
