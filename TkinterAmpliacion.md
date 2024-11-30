@@ -82,7 +82,7 @@ with open('salida.txt', 'w') as archivo:
 
 ### Modos de Apertura
 
-| Modo | Descripción |quit
+| Modo | Descripción |
 |------|-------------|
 | `'r'` | Lectura (por defecto). El archivo debe existir. |
 | `'w'` | Escritura. Crea un archivo nuevo o sobrescribe uno existente. |
