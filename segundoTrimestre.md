@@ -1,6 +1,5 @@
 **Semana 1: Introducción a Firebase**
 
-
 ### **Objetivo**
 
 En esta semana aprenderás los conceptos básicos de Firebase, incluyendo cómo configurar un proyecto, implementar autenticación y trabajar con la base de datos en tiempo real utilizando el usuario autenticado. Cada instrucción y método se explica en detalle para que puedas aplicar este conocimiento de forma autónoma.
@@ -32,8 +31,7 @@ Firebase es una plataforma de desarrollo de aplicaciones que proporciona diversa
 
 #### **Paso 3: Configurar Firebase en Android Studio**
 
-1. Sigue los pasos de configuración del gradle que indica Firebase
-
+1. Sigue los pasos de configuración del gradle que indica Firebase.
 2. Sincroniza el proyecto para aplicar los cambios y asegúrate de que no haya errores.
 
 ---
@@ -59,22 +57,27 @@ En `activity_main.xml`, agrega los siguientes elementos:
     android:inputType="textPassword" />
 
 <Button
+    android:id="@+id/registerButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Register" />
+
+<Button
     android:id="@+id/loginButton"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="Login" />
 ```
 
-#### **Paso 2: Autenticación de usuarios**
+#### **Paso 2: Registro de nuevos usuarios**
 
 En `MainActivity.java`:
 
 1. Importa las bibliotecas necesarias:
    ```java
    import com.google.firebase.auth.FirebaseAuth;
-   import com.google.firebase.auth.FirebaseUser;
    ```
-2. Inicializa Firebase Authentication y configura el botón de inicio de sesión:
+2. Inicializa Firebase Authentication y configura el botón de registro:
    ```java
    public class MainActivity extends AppCompatActivity {
        private FirebaseAuth mAuth;
@@ -86,20 +89,19 @@ En `MainActivity.java`:
 
            mAuth = FirebaseAuth.getInstance();
 
-           findViewById(R.id.loginButton).setOnClickListener(v -> loginUser());
+           findViewById(R.id.registerButton).setOnClickListener(v -> registerUser());
        }
 
-       private void loginUser() {
+       private void registerUser() {
            String email = ((EditText) findViewById(R.id.emailEditText)).getText().toString();
            String password = ((EditText) findViewById(R.id.passwordEditText)).getText().toString();
 
-           mAuth.signInWithEmailAndPassword(email, password)
+           mAuth.createUserWithEmailAndPassword(email, password)
                .addOnCompleteListener(this, task -> {
                    if (task.isSuccessful()) {
-                       FirebaseUser user = mAuth.getCurrentUser();
-                       Toast.makeText(MainActivity.this, "Login exitoso: " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                       Toast.makeText(MainActivity.this, "Usuario registrado correctamente.", Toast.LENGTH_SHORT).show();
                    } else {
-                       Toast.makeText(MainActivity.this, "Error en autenticación.", Toast.LENGTH_SHORT).show();
+                       Toast.makeText(MainActivity.this, "Error en el registro: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                    }
                });
        }
@@ -108,9 +110,37 @@ En `MainActivity.java`:
 
 **Explicación:**
 
-- `FirebaseAuth.getInstance()`: Devuelve la instancia de autenticación.
-- `signInWithEmailAndPassword(email, password)`: Verifica las credenciales y autentica al usuario.
-- `FirebaseUser.getEmail()`: Recupera el email del usuario autenticado.
+- `FirebaseAuth.getInstance()`: Devuelve la instancia de autenticación de Firebase.
+- `createUserWithEmailAndPassword(email, password)`: Registra un nuevo usuario con el correo y contraseña proporcionados.
+- `addOnCompleteListener`: Se ejecuta al completar el registro, indicando éxito o error.
+- `getException().getMessage()`: Recupera el mensaje del error, si ocurre.
+
+#### **Paso 3: Inicio de sesión de usuarios**
+
+Configura el botón de inicio de sesión:
+
+```java
+findViewById(R.id.loginButton).setOnClickListener(v -> loginUser());
+
+private void loginUser() {
+    String email = ((EditText) findViewById(R.id.emailEditText)).getText().toString();
+    String password = ((EditText) findViewById(R.id.passwordEditText)).getText().toString();
+
+    mAuth.signInWithEmailAndPassword(email, password)
+        .addOnCompleteListener(this, task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(MainActivity.this, "Inicio de sesión exitoso.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MainActivity.this, "Error en autenticación.", Toast.LENGTH_SHORT).show();
+            }
+        });
+}
+```
+
+**Explicación:**
+
+- `signInWithEmailAndPassword(email, password)`: Autentica al usuario con las credenciales proporcionadas.
+- `Toast`: Muestra un mensaje en pantalla para retroalimentar al usuario.
 
 ---
 
@@ -154,45 +184,18 @@ ValueEventListener userListener = new ValueEventListener() {
 databaseRef.addListenerForSingleValueEvent(userListener);
 ```
 
-#### **4.3. Modificar datos**
+**Explicación:**
 
-Para modificar datos existentes, utiliza el método `updateChildren`:
+- `DatabaseReference`: Representa una referencia a una ubicación en la base de datos.
+- `ValueEventListener`: Es un oyente que se utiliza para leer datos de Firebase. Contiene dos métodos principales:
+  - `onDataChange`: Se ejecuta cuando se obtienen datos de la base de datos. Los datos se devuelven como un objeto `DataSnapshot` que permite acceder a los valores almacenados.
+  - `onCancelled`: Se ejecuta si ocurre algún error al intentar leer los datos.
+- `addListenerForSingleValueEvent`: Lee los datos de la base de datos una única vez en lugar de escuchar cambios en tiempo real.
+- `DataSnapshot`: Proporciona acceso a los datos reales en el nodo de la base de datos al que se hace referencia.
 
-```java
-DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users/user123");
+#### **4.3. Añadir datos a Firebase**
 
-Map<String, Object> updates = new HashMap<>();
-updates.put("email", "nuevoemail@example.com");
-updates.put("phone", "1234567890");
-
-userRef.updateChildren(updates).addOnCompleteListener(task -> {
-    if (task.isSuccessful()) {
-        Log.d("Firebase", "Datos actualizados correctamente.");
-    } else {
-        Log.w("Firebase", "Error al actualizar datos.", task.getException());
-    }
-});
-```
-
-#### **4.4. Eliminar datos**
-
-Para eliminar datos, utiliza el método `removeValue`:
-
-```java
-DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users/user123");
-
-userRef.removeValue().addOnCompleteListener(task -> {
-    if (task.isSuccessful()) {
-        Log.d("Firebase", "Usuario eliminado correctamente.");
-    } else {
-        Log.w("Firebase", "Error al eliminar usuario.", task.getException());
-    }
-});
-```
-
-#### **4.5. Añadir datos**
-
-Para añadir nuevos datos, utiliza el método `push` o `setValue`:
+Para añadir datos, utiliza el método `setValue` y `push`:
 
 ```java
 DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("users");
@@ -209,66 +212,79 @@ databaseRef.child(userId).setValue(newUser).addOnCompleteListener(task -> {
 });
 ```
 
-#### **4.6. Crear tablas con relaciones**
+**Explicación:**
 
-En Firebase, las tablas se representan como nodos en un árbol JSON. Puedes establecer relaciones creando referencias cruzadas:
+- `push()`: Genera una clave única para cada nodo hijo.
+- `setValue(Object value)`: Escribe un objeto en la base de datos.
+- `addOnCompleteListener`: Informa si la operación fue exitosa o falló.
 
-- **Estructura de ejemplo:**
+#### **4.4. Modificar datos existentes**
 
-```json
-{
-  "users": {
-    "user123": {
-      "name": "John Doe",
-      "email": "johndoe@example.com",
-      "orders": {
-        "order1": true,
-        "order2": true
-      }
-    }
-  },
-  "orders": {
-    "order1": {
-      "product": "Laptop",
-      "price": 1000
-    },
-    "order2": {
-      "product": "Phone",
-      "price": 500
-    }
-  }
-}
-```
-
-- **Acceso a datos relacionados:**
+Para modificar datos, utiliza el método `updateChildren`:
 
 ```java
-DatabaseReference userOrdersRef = FirebaseDatabase.getInstance().getReference("users/user123/orders");
+DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("orders/order1");
 
-userOrdersRef.addListenerForSingleValueEvent(new ValueEventListener() {
-    @Override
-    public void onDataChange(@NonNull DataSnapshot snapshot) {
-        for (DataSnapshot orderSnapshot : snapshot.getChildren()) {
-            String orderId = orderSnapshot.getKey();
-            DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("orders/" + orderId);
-            orderRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot orderSnapshot) {
-                    String product = orderSnapshot.child("product").getValue(String.class);
-                    Log.d("Firebase", "Producto: " + product);
-                }
+Map<String, Object> updates = new HashMap<>();
+updates.put("price", 1300);
+updates.put("product", "Laptop Pro");
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.w("Firebase", "Error al leer orden", error.toException());
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onCancelled(@NonNull DatabaseError error) {
-        Log.w("Firebase", "Error al leer órdenes del usuario", error.toException());
+orderRef.updateChildren(updates).addOnCompleteListener(task -> {
+    if (task.isSuccessful()) {
+        Log.d("Firebase", "Orden actualizada correctamente.");
+    } else {
+        Log.w("Firebase", "Error al actualizar la orden.", task.getException());
     }
 });
 ```
+
+**Explicación:**
+
+- `updateChildren(Map<String, Object>)`: Actualiza múltiples campos de un nodo específico.
+
+#### **4.5. Eliminar datos**
+
+Para eliminar órdenes específicas:
+
+```java
+DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("orders/order2");
+
+orderRef.removeValue().addOnCompleteListener(task -> {
+    if (task.isSuccessful()) {
+        Log.d("Firebase", "Orden eliminada correctamente.");
+    } else {
+        Log.w("Firebase", "Error al eliminar la orden.", task.getException());
+    }
+});
+```
+
+**Explicación:**
+
+- `removeValue()`: Borra el nodo completo de la base de datos asociado a una orden.
+
+#### **Ejemplo avanzado: Modificar un campo anidado en órdenes**
+
+```java
+DatabaseReference reviewRef = FirebaseDatabase.getInstance().getReference("orders/order1/reviews/review1");
+
+Map<String, Object> reviewUpdates = new HashMap<>();
+reviewUpdates.put("rating", 4);
+reviewUpdates.put("comment", "Muy buen producto, pero un poco caro.");
+
+reviewRef.updateChildren(reviewUpdates).addOnCompleteListener(task -> {
+    if (task.isSuccessful()) {
+        Log.d("Firebase", "Reseña actualizada correctamente.");
+    } else {
+        Log.w("Firebase", "Error al actualizar la reseña.", task.getException());
+    }
+});
+```
+
+**Explicación:**
+
+- Este ejemplo modifica un nodo más profundo en la estructura JSON, mostrando flexibilidad en Firebase.
+
+---
+
+
+
