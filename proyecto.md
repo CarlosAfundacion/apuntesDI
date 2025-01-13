@@ -21,24 +21,39 @@ Configurar Firebase en un proyecto de Android Studio, implementar autenticación
    - Configurar los archivos `build.gradle` según las instrucciones proporcionadas por Firebase.
 
 2. **Interfaz de Usuario:**
-   - **LoginActivity:**
+    - **RegisterActivity:**
+     - Diseñar una pantalla de registro que permita al usuario ingresar los siguientes datos:
+       - Nombre completo.
+       - Email.
+       - Contraseña.
+       - Confirmación de contraseña.
+       - Teléfono.
+       - Dirección.
+     - Validar que todos los campos sean completados y que las contraseñas coincidan antes de registrar al usuario.
+     - Al registrar al usuario:
+       - Guardar el email y la contraseña en Firebase Authentication.
+       - Crear un nodo en Firebase Realtime Database bajo el identificador del usuario registrado con los datos adicionales (nombre, teléfono, dirección).
+
+    - **LoginActivity:**
      - Diseñar una pantalla de inicio de sesión con los siguientes elementos:
        - Campo de texto para email.
        - Campo de texto para contraseña.
        - Botón para registrar un nuevo usuario.
        - Botón para iniciar sesión.
-   - **DashboardActivity:**
+
+    - **DashboardActivity:**
      - Diseñar una pantalla que muestre un único elemento desde Firebase (título, descripción e imagen).
      - Agregar un botón de **Logout** en la parte superior derecha de la interfaz. Este botón nos devolverá a LoginActivity
 
-3. **Funcionalidades de Firebase:**
+4. **Funcionalidades de Firebase:**
    - **Autenticación:**
      - Implementar el registro de usuarios con email y contraseña utilizando `FirebaseAuth`.
      - Implementar el inicio de sesión para usuarios registrados.
+     - Implementar el logout.
    - **Realtime Database:**
      - Configurar reglas de seguridad para permitir acceso solo a usuarios autenticados.
-     - Cargar datos iniciales (10) en Firebase Realtime Database mediante un archivo JSON. Estos tienen que tratar una temática común (misma tabla), con campos título, descripción e imagen Ejemplo:
-
+     - Cargar datos iniciales (10) en Firebase Realtime Database mediante un archivo JSON. Estos tienen que tratar una temática común (misma tabla), con campos título, descripción e imagen.
+     - Leer uno de los datos cargados inicialmente.
 
 
 #### **Entregables**
@@ -51,6 +66,7 @@ Carpeta con el proyecto completo de Android Studio
 Archivo JSON utilizado para cargar datos iniciales en Firebase.
 Capturas de pantalla mostrando distintas pruebas en:
   - Pantalla de inicio de sesión.
+  - Pantalla de registro.
   - Pantalla de visualización de datos.
 
 ---
