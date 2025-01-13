@@ -1,1 +1,59 @@
+# **Proyecto segundo trimestre**
+Diseñar y desarrollar una aplicación móvil en Android Studio utilizando Firebase como backend. A lo largo de cinco semanas, los estudiantes implementarán funcionalidades clave, incluyendo autenticación, almacenamiento en tiempo real, patrones de diseño, pruebas, uso de Material Design y despliegue final de la aplicación.
+
+#### **Duración**
+- **Total:** 5 semanas (45 sesiones de 50 minutos).
+- **Distribución:** La práctica se desarrollará incrementalmente semana a semana, con nuevas funcionalidades integradas en cada etapa.
+
+---
+
+## **Semana 1: Introducción a Firebase y Pantallas Iniciales**
+
+#### **Objetivo**
+Configurar Firebase en un proyecto de Android Studio, implementar autenticación de usuarios y crear una pantalla principal que muestre datos almacenados en Firebase Realtime Database.
+
+#### **Tareas**
+
+1. **Configuración del Proyecto Firebase:**
+   - Crear un proyecto en Firebase Console.
+   - Registrar la aplicación Android en Firebase.
+   - Descargar el archivo `google-services.json` y agregarlo al proyecto en Android Studio.
+   - Configurar los archivos `build.gradle` según las instrucciones proporcionadas por Firebase.
+
+2. **Interfaz de Usuario:**
+   - **LoginActivity:**
+     - Diseñar una pantalla de inicio de sesión con los siguientes elementos:
+       - Campo de texto para email.
+       - Campo de texto para contraseña.
+       - Botón para registrar un nuevo usuario.
+       - Botón para iniciar sesión.
+   - **DashboardActivity:**
+     - Diseñar una pantalla que muestre un único elemento desde Firebase (título, descripción e imagen).
+     - Agregar un botón de **Logout** en la parte superior derecha de la interfaz. Este botón nos devolverá a LoginActivity
+
+3. **Funcionalidades de Firebase:**
+   - **Autenticación:**
+     - Implementar el registro de usuarios con email y contraseña utilizando `FirebaseAuth`.
+     - Implementar el inicio de sesión para usuarios registrados.
+   - **Realtime Database:**
+     - Configurar reglas de seguridad para permitir acceso solo a usuarios autenticados.
+     - Cargar datos iniciales (10) en Firebase Realtime Database mediante un archivo JSON. Estos tienen que tratar una temática común (misma tabla), con campos título, descripción e imagen Ejemplo:
+
+
+
+#### **Entregables**
+1.GitHub:
+Código fuente completo subido al repositorio. Trabaja en la rama semana. Haz un commit por cada tarea significativa terminada. Para la entrega, haz un merge a la rama principal. 
+
+2.Classroom:
+Enlace al repositorio.
+Carpeta con el proyecto completo de Android Studio
+Archivo JSON utilizado para cargar datos iniciales en Firebase.
+Capturas de pantalla mostrando distintas pruebas en:
+  - Pantalla de inicio de sesión.
+  - Pantalla de visualización de datos.
+
+---
+
+
 
