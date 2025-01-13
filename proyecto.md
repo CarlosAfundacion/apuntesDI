@@ -1,5 +1,5 @@
 # **Proyecto segundo trimestre**
-Diseñar y desarrollar una aplicación móvil en Android Studio utilizando Firebase como backend. A lo largo de cinco semanas, los estudiantes implementarán funcionalidades clave, incluyendo autenticación, almacenamiento en tiempo real, patrones de diseño, pruebas, uso de Material Design y despliegue final de la aplicación.
+Diseñar y desarrollar una aplicación móvil en Android Studio utilizando Firebase como backend. Cada uno elegirá una temática de su interés (gestor de recetas, catálogo de videojuegos, agenda de contactos, etc) A lo largo de cinco semanas, los estudiantes implementarán funcionalidades clave, incluyendo autenticación, almacenamiento en tiempo real, patrones de diseño, pruebas, uso de Material Design y despliegue final de la aplicación.
 
 #### **Duración**
 - **Total:** 5 semanas (45 sesiones de 50 minutos).
@@ -21,6 +21,7 @@ Configurar Firebase en un proyecto de Android Studio, implementar autenticación
    - Configurar los archivos `build.gradle` según las instrucciones proporcionadas por Firebase.
 
 2. **Interfaz de Usuario:**
+   - Elaborar las siguientes pantallas en Figma siguiendo lo aprendido en la tarea de Grupo de Expertos.
     - **RegisterActivity:**
      - Diseñar una pantalla de registro que permita al usuario ingresar los siguientes datos:
        - Nombre completo.
