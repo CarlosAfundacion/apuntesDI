@@ -26,7 +26,7 @@ Firebase es una plataforma de desarrollo de aplicaciones que proporciona diversa
 #### **Paso 2: Registrar tu app Android en Firebase**
 
 1. Selecciona **Agregar app** y elige Android.
-2. Ingresa el nombre del paquete de tu app (puedes encontrarlo en `AndroidManifest.xml`, atributo `package`).
+2. Ingresa el nombre del paquete de tu app (puedes encontrarlo en el modo de vista `Packages`, con formato `com.example.nombreDeTuApp`).
 3. Descarga el archivo `google-services.json` proporcionado y cópialo en la carpeta `app/` del proyecto.
 
 #### **Paso 3: Configurar Firebase en Android Studio**
