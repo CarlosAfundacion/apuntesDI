@@ -195,26 +195,33 @@ databaseRef.addListenerForSingleValueEvent(userListener);
 
 #### **4.3. Añadir datos a Firebase**
 
-Para añadir datos, utiliza el método `setValue` y `push`:
+Para añadir datos, utiliza el método `setValue`:
 
 ```java
 DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("users");
 
-String userId = databaseRef.push().getKey();
-User newUser = new User(userId, "John Doe", "johndoe@example.com");
-
-databaseRef.child(userId).setValue(newUser).addOnCompleteListener(task -> {
-    if (task.isSuccessful()) {
-        Log.d("Firebase", "Usuario añadido correctamente.");
-    } else {
-        Log.w("Firebase", "Error al añadir usuario.", task.getException());
-    }
+FirebaseUser firebaseUser = auth.getCurrentUser();
+            if (firebaseUser != null) {
+                String uid = firebaseUser.getUid();
+                User newUser = new User(uid, "John Doe", "johndoe@example.com");
+                databaseRef.child(uid).setValue(newUser)
+                    .addOnCompleteListener(dbTask -> {
+                        if (dbTask.isSuccessful()) {
+                            Log.d("Firebase", "Usuario añadido a Realtime Database con UID: " + uid);
+                        } else {
+                            Log.e("Firebase", "Error al añadir usuario a la base de datos", dbTask.getException());
+                        }
+                    });
+            }
+        } else {
+            Log.e("Firebase", "Error al registrar usuario", task.getException());
+        }
 });
 ```
 
 **Explicación:**
 
-- `push()`: Genera una clave única para cada nodo hijo.
+- `push()`: Genera una clave única para cada nodo hijo, en el ejemplo usamos la Id única proporcionada por Authentication de Firebase. Si queremos añadir un elemento a otra tabla que no sea la de usuario, usaremos `pus().getKey()`para hacerlo.
 - `setValue(Object value)`: Escribe un objeto en la base de datos.
 - `addOnCompleteListener`: Informa si la operación fue exitosa o falló.
 
