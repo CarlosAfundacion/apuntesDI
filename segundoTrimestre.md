@@ -221,7 +221,7 @@ FirebaseUser firebaseUser = auth.getCurrentUser();
 
 **Explicación:**
 
-- `push()`: Genera una clave única para cada nodo hijo, en el ejemplo usamos la Id única proporcionada por Authentication de Firebase. Si queremos añadir un elemento a otra tabla que no sea la de usuario, usaremos `pus().getKey()`para hacerlo.
+- `push()`: Genera una clave única para cada nodo hijo, en el ejemplo usamos la Id única proporcionada por Authentication de Firebase. Si queremos añadir un elemento a otra tabla que no sea la de usuario, usaremos `push().getKey()`para hacerlo.
 - `setValue(Object value)`: Escribe un objeto en la base de datos.
 - `addOnCompleteListener`: Informa si la operación fue exitosa o falló.
 
