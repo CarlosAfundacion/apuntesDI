@@ -59,11 +59,11 @@ Configurar Firebase en un proyecto de Android Studio, implementar autenticación
 
 
 #### **Entregables**
-1.GitHub:
+1. GitHub:
 Código fuente completo subido al repositorio. Trabaja en la rama semana. Haz un commit por cada tarea significativa terminada. Para la entrega, haz un merge a la rama principal.
 Los commits deben comenzar por: "SemanaX: commit que estimes oportuno." (Hay que cambiar la X por el número de semana/etapa en la que estáis en cada caso)
 
-2.Classroom:
+2. Classroom:
 Enlace al repositorio.
 Carpeta con el proyecto completo de Android Studio
 Archivo JSON utilizado para cargar datos iniciales en Firebase.
