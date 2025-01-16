@@ -22,6 +22,7 @@ Firebase es una plataforma de desarrollo de aplicaciones que proporciona diversa
 1. Accede a la [Consola de Firebase](https://console.firebase.google.com/).
 2. Haz clic en **Agregar proyecto**.
 3. Introduce un nombre para el proyecto (por ejemplo, `MyFirebaseApp`) y completa la configuración.
+4. Activar Realtime Database y Authenticator.
 
 #### **Paso 2: Registrar tu app Android en Firebase**
 
