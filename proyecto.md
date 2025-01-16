@@ -16,6 +16,7 @@ Configurar Firebase en un proyecto de Android Studio, implementar autenticación
 
 1. **Configuración del Proyecto Firebase:**
    - Crear un proyecto en Firebase Console.
+   - Activar Authenticator y Realtime Database.
    - Registrar la aplicación Android en Firebase.
    - Descargar el archivo `google-services.json` y agregarlo al proyecto en Android Studio.
    - Configurar los archivos `build.gradle` según las instrucciones proporcionadas por Firebase.
