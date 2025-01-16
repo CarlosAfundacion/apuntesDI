@@ -67,10 +67,11 @@ Los commits deben comenzar por: "SemanaX: commit que estimes oportuno." (Hay que
 Enlace al repositorio.
 Carpeta con el proyecto completo de Android Studio
 Archivo JSON utilizado para cargar datos iniciales en Firebase.
-Capturas de pantalla mostrando distintas pruebas en:
+Vídeo mostrando funcionalidad y pruebas de la aplicación en (No es necesario audio):
   - Pantalla de inicio de sesión.
   - Pantalla de registro.
   - Pantalla de visualización de datos.
+  - Logout
 
 ---
 
