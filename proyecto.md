@@ -21,6 +21,7 @@ Configurar Firebase en un proyecto de Android Studio, implementar autenticación
    - Configurar los archivos `build.gradle` según las instrucciones proporcionadas por Firebase.
 
 2. **Interfaz de Usuario:**
+   - **Si el programa no te almacena el usuario en Realtime Database, vuelve a generar el google-services.json y añádelo a tu aplicación de nuevo. En clase comenté que primero había que habilitar el Authenticator y Realtime Database en Firebase, pero me olvidé de reflejarlo aquí.**
    - Elaborar las siguientes pantallas en Figma siguiendo lo aprendido en la tarea de Grupo de Expertos.
     - **RegisterActivity:**
      - Diseñar una pantalla de registro que permita al usuario ingresar los siguientes datos:
