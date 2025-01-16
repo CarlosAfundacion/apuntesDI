@@ -44,7 +44,7 @@ Configurar Firebase en un proyecto de Android Studio, implementar autenticación
        - Botón para iniciar sesión.
 
     - **DashboardActivity:**
-     - Diseñar una pantalla que muestre un único elemento desde Firebase (título, descripción e imagen - será accesible meddiante URL).
+     - Diseñar una pantalla que muestre un único elemento desde Firebase (título, descripción e imagen - será accesible mediante URL).
      - Agregar un botón de **Logout** en la parte superior derecha de la interfaz. Este botón nos devolverá a LoginActivity
 
 4. **Funcionalidades de Firebase:**
