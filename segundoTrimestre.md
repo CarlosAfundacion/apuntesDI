@@ -410,28 +410,28 @@ Cuando implementamos un **RecyclerView** siguiendo el patrón **MVVM** (Model-Vi
 
 ## **Principales componentes de RecyclerView en MVVM**
 
-### 1. **Modelo (Model)**
+##### 1. **Modelo (Model)**
 El modelo representa la fuente de datos que se mostrará en el RecyclerView. Es una clase que define la estructura de los datos. 
-### 2. **Vista (View)**
+##### 2. **Vista (View)**
 En este caso, la **View** está compuesta por:
 
-#### a. **RecyclerView en el XML**
+###### a. **RecyclerView en el XML**
 Define el RecyclerView en el layout XML del fragmento o actividad:
 
-#### b. **Adaptador (Adapter)**
+###### b. **Adaptador (Adapter)**
 El adaptador es responsable de vincular los datos con las vistas. Implementa la lógica para asociar cada elemento del modelo con un ViewHolder.
 
-#### c. **ViewHolder**
+###### c. **ViewHolder**
 Un contenedor que almacena referencias a las vistas dentro de cada elemento del RecyclerView. Se define dentro del adaptador.
 
-#### d. **Layout del ítem**
+###### d. **Layout del ítem**
 El layout XML para los elementos individuales del RecyclerView, como `item_user.xml`.
 
-### 3. **ViewModel**
+##### 3. **ViewModel**
 El ViewModel gestiona la lógica y la fuente de datos que se mostrará en la vista. Proporciona los datos al RecyclerView a través de un `LiveData` o `MutableLiveData`.
 
 
-### 4. **Enlazar la Vista y el ViewModel**
+##### 4. **Enlazar la Vista y el ViewModel**
 
 En el Fragmento o Actividad, enlazas el ViewModel con el RecyclerView.
 
@@ -471,25 +471,6 @@ public class Product {
 - **Constructor completo:** Útil para inicializar manualmente un objeto de tipo `Product`.
 - **Métodos `get`:** Permiten acceder a las propiedades del objeto, utilizados en Data Binding y lógica de negocio.
 
-```java
-public class Product {
-    private String id;
-    private String name;
-    private double price;
-
-    public Product() {}
-
-    public Product(String id, String name, double price) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-    }
-
-    public String getId() { return id; }
-    public String getName() { return name; }
-    public double getPrice() { return price; }
-}
-```
 
 ##### **4.2. Repositorio: ProductRepository.java**
 
@@ -536,39 +517,6 @@ public class ProductRepository {
   - **`onDataChange`:** Se ejecuta cuando hay cambios en la base de datos. Recupera los productos y los almacena en una lista.
   - **`onCancelled`:** Maneja posibles errores en la consulta.
 
-```java
-import com.google.firebase.database.*;
-import androidx.lifecycle.MutableLiveData;
-import java.util.ArrayList;
-import java.util.List;
-
-public class ProductRepository {
-    private final DatabaseReference productRef;
-
-    public ProductRepository() {
-        productRef = FirebaseDatabase.getInstance().getReference("products");
-    }
-
-    public void getProducts(MutableLiveData<List<Product>> productLiveData) {
-        productRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                List<Product> products = new ArrayList<>();
-                for (DataSnapshot child : snapshot.getChildren()) {
-                    Product product = child.getValue(Product.class);
-                    products.add(product);
-                }
-                productLiveData.setValue(products);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Handle errors
-            }
-        });
-    }
-}
-```
 
 ##### **4.3. ViewModel: ProductViewModel.java**
 
@@ -606,30 +554,6 @@ public class ProductViewModel extends ViewModel {
 - **`getProductLiveData`:** Expone los datos como `LiveData` para que puedan ser observados desde la vista.
 - **`loadProducts`:** Llama al repositorio para obtener los productos y actualizar los datos observables.
 
-```java
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-import java.util.List;
-
-public class ProductViewModel extends ViewModel {
-    private final MutableLiveData<List<Product>> productLiveData = new MutableLiveData<>();
-    private final ProductRepository productRepository;
-
-    public ProductViewModel() {
-        productRepository = new ProductRepository();
-        loadProducts();
-    }
-
-    public LiveData<List<Product>> getProductLiveData() {
-        return productLiveData;
-    }
-
-    private void loadProducts() {
-        productRepository.getProducts(productLiveData);
-    }
-}
-```
 
 ##### **4.4. Adaptador del RecyclerView: ProductAdapter.java**
 
