@@ -383,7 +383,7 @@ app/
      ```gradle
      android {
          buildFeatures {
-             dataBinding true
+             dataBinding = true
          }
      }
      ```
@@ -391,16 +391,52 @@ app/
    - Agregar dependencias necesarias:
      ```gradle
      dependencies {
-         implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-         implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
-         implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
-         implementation "androidx.recyclerview:recyclerview:1.2.1"
+         implementation ("androidx.lifecycle:lifecycle-extensions:2.2.0")
+         implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
+         implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+         implementation ("androidx.recyclerview:recyclerview:1.2.1")
      }
      ```
 
 ---
 
 #### **4. Implementación de un RecyclerView con MVVM para productos**
+
+Un **RecyclerView** es un componente de la biblioteca de Android que permite mostrar una lista o colección de datos de manera eficiente, especialmente cuando se trabaja con grandes cantidades de elementos. Se utiliza en reemplazo del antiguo **ListView** y **GridView** debido a su mayor flexibilidad y rendimiento.
+
+Cuando implementamos un **RecyclerView** siguiendo el patrón **MVVM** (Model-View-ViewModel), se estructura de manera que los datos y la lógica de la interfaz estén separados, siguiendo los principios de arquitectura moderna. Aquí se detallan sus principales componentes y cómo encajan en MVVM:
+
+---
+
+## **Principales componentes de RecyclerView en MVVM**
+
+### 1. **Modelo (Model)**
+El modelo representa la fuente de datos que se mostrará en el RecyclerView. Es una clase que define la estructura de los datos. 
+### 2. **Vista (View)**
+En este caso, la **View** está compuesta por:
+
+#### a. **RecyclerView en el XML**
+Define el RecyclerView en el layout XML del fragmento o actividad:
+
+#### b. **Adaptador (Adapter)**
+El adaptador es responsable de vincular los datos con las vistas. Implementa la lógica para asociar cada elemento del modelo con un ViewHolder.
+
+#### c. **ViewHolder**
+Un contenedor que almacena referencias a las vistas dentro de cada elemento del RecyclerView. Se define dentro del adaptador.
+
+#### d. **Layout del ítem**
+El layout XML para los elementos individuales del RecyclerView, como `item_user.xml`.
+
+### 3. **ViewModel**
+El ViewModel gestiona la lógica y la fuente de datos que se mostrará en la vista. Proporciona los datos al RecyclerView a través de un `LiveData` o `MutableLiveData`.
+
+
+### 4. **Enlazar la Vista y el ViewModel**
+
+En el Fragmento o Actividad, enlazas el ViewModel con el RecyclerView.
+
+
+---
 
 ##### **4.1. Modelo: Product.java**
 
@@ -664,65 +700,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 - **`bind`:** Vincula un objeto `Product` con las vistas declaradas en `item_product.xml`.
 - **`setProducts`:** Actualiza la lista de productos y notifica cambios al RecyclerView.
 
-```java
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
-import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.RecyclerView;
-import com.example.app.databinding.ItemProductBinding;
-import java.util.List;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
-    private List<Product> products;
-
-    public ProductAdapter(List<Product> products) {
-        this.products = products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-        notifyDataSetChanged();
-    }
-
-    @NonNull
-    @Override
-    public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemProductBinding binding = DataBindingUtil.inflate(
-            LayoutInflater.from(parent.getContext()),
-            R.layout.item_product,
-            parent,
-            false
-        );
-        return new ProductViewHolder(binding);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-        Product product = products.get(position);
-        holder.bind(product);
-    }
-
-    @Override
-    public int getItemCount() {
-        return products != null ? products.size() : 0;
-    }
-
-    static class ProductViewHolder extends RecyclerView.ViewHolder {
-        private final ItemProductBinding binding;
-
-        public ProductViewHolder(@NonNull ItemProductBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-        }
-
-        public void bind(Product product) {
-            binding.setProduct(product);
-            binding.executePendingBindings();
-        }
-    }
-}
-```
 
 ###### **Archivo XML: item_product.xml**
 
@@ -762,34 +740,7 @@ Este archivo define la estructura visual de cada elemento del RecyclerView. Util
 - **`<variable>`:** Declara la variable `product` de tipo `Product`, accesible en este diseño.
 - **`@{}`:** Permite acceder a propiedades del objeto `Product` y vincularlas directamente a las vistas.
 
-```xml
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-    <data>
-        <variable
-            name="product"
-            type="com.example.app.models.Product" />
-    </data>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/productName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{product.name}" />
-
-        <TextView
-            android:id="@+id/productPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{String.valueOf(product.price)}" />
-
-    </LinearLayout>
-</layout>
-```
 
 ##### **4.5. Configuración del RecyclerView en MainActivity.java**
 
