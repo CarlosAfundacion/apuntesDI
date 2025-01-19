@@ -76,5 +76,92 @@ Vídeo mostrando funcionalidad y pruebas de la aplicación en (No es necesario a
 
 ---
 
+### **Semana 2: Implementación de MVVM y Pantalla de Detalle**
+#### **Objetivo**
+Desarrollar una arquitectura basada en el patrón de diseño MVVM (Model-View-ViewModel) para todas las pantallas del proyecto iniciado en la semana 1. Además, implementar una nueva pantalla de detalle (`DetailActivity`) que se abrirá al seleccionar un elemento del `RecyclerView` en la pantalla principal (`DashboardActivity`). La nueva pantalla mostrará el título, la imagen y la descripción del elemento seleccionado.
+
+---
+
+#### **Tareas**
+1. **Reestructuración del Proyecto para MVVM**
+   - Crear los paquetes `models`, `repositories`, `viewmodels`, y mover las clases a sus ubicaciones correspondientes:
+     - **`models/`:** Clases que representan la estructura de datos (e.g., `Recipe`, `Game`, `Contact`).
+     - **`repositories/`:** Clases encargadas de interactuar con Firebase para cargar o guardar datos.
+     - **`viewmodels/`:** Clases `ViewModel` que exponen los datos observables a las vistas.
+
+2. **Pantalla de Registro (`RegisterActivity`)**
+   - Crear un modelo `User.java` para representar los datos del usuario.
+   - Implementar un repositorio (`UserRepository`) que gestione la autenticación y el almacenamiento de datos en Firebase.
+   - Implementar un `RegisterViewModel` que valide los datos del formulario y gestione el registro de usuarios.
+   - Modificar `RegisterActivity` para observar los datos del `RegisterViewModel` y reaccionar a cambios.
+
+3. **Pantalla de Inicio de Sesión (`LoginActivity`)**
+   - Agregar funcionalidad al `UserRepository` para gestionar el inicio de sesión.
+   - Crear un `LoginViewModel` que exponga métodos para iniciar sesión.
+   - Actualizar `LoginActivity` para usar el `LoginViewModel` y observar los resultados de la autenticación.
+
+4. **Pantalla Principal (`DashboardActivity`)**
+   - Implementar un `RecyclerView` que muestre una lista de elementos relacionados con la temática seleccionada.
+   - Diseñar un modelo que represente los elementos de la lista (e.g., `Recipe`, `Game`, `Contact`).
+   - Crear un adaptador para enlazar los datos con el `RecyclerView`.
+   - Implementar un repositorio (`DashboardRepository`) que cargue los datos desde Firebase.
+   - Crear un `DashboardViewModel` que exponga los datos observables para la lista.
+   - Agregar un botón de **Logout** en la parte superior que permita cerrar sesión y volver a la `LoginActivity`.
+   - Configurar un evento en el adaptador para abrir el `DetailActivity` al seleccionar un elemento.
+
+5. **Pantalla de Detalle (`DetailActivity`)**
+   - Diseñar la interfaz del `DetailActivity` para mostrar el título, la imagen y la descripción del elemento seleccionado.
+   - Pasar los datos del elemento seleccionado desde el `DashboardActivity` mediante un `Intent`.
+
+---
+
+#### **Estructura del Proyecto**
+```
+app/
+  src/
+    main/
+      java/
+        com.example.app/
+          models/
+            User.java
+            Recipe.java
+          repositories/
+            UserRepository.java
+            DashboardRepository.java
+          viewmodels/
+            RegisterViewModel.java
+            LoginViewModel.java
+            DashboardViewModel.java
+          views/
+            RegisterActivity.java
+            LoginActivity.java
+            DashboardActivity.java
+            DetailActivity.java
+          adapters/
+            RecipeAdapter.java
+          
+```
+
+---
+
+#### **Entregables**
+1. **Código en GitHub:**
+   - Rama `semana2`.
+   - Realizar commits por cada tarea completada, siguiendo la nomenclatura: `Semana2: [descripción del cambio]`.
+   - Para la entrega, mergea semana2 con main.
+
+2. **Documentos y Vídeos:**
+   - Archivo JSON con los datos iniciales.
+   - Video demostrativo con las siguientes funciones, mostrando la estructura del proyecto:
+     - Registro de usuario.
+     - Inicio de sesión.
+     - Visualización de la lista de elementos.
+     - Navegación al detalle desde el Dashboard.
+     - Logout desde el Dashboard.
+
+3. **Presentación en Classroom:**
+   - Enlace al repositorio.
+   - Archivo comprimido con el proyecto de Android Studio.
+
 
 
