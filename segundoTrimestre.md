@@ -398,30 +398,6 @@ app/
      }
      ```
 
-   - Habilitar compatibilidad con Java 8:
-     ```gradle
-     android {
-         compileOptions {
-             sourceCompatibility JavaVersion.VERSION_1_8
-             targetCompatibility JavaVersion.VERSION_1_8
-         }
-     }
-     ```
-
-2. **Manifest:**
-   - Definir la aplicación y la actividad principal:
-     ```xml
-     <application
-         android:theme="@style/AppTheme">
-         <activity android:name=".views.MainActivity">
-             <intent-filter>
-                 <action android:name="android.intent.action.MAIN" />
-                 <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
-         </activity>
-     </application>
-     ```
-
 ---
 
 #### **4. Implementación de un RecyclerView con MVVM para productos**
