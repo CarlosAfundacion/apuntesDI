@@ -76,7 +76,7 @@ Vídeo mostrando funcionalidad y pruebas de la aplicación en (No es necesario a
 
 ---
 
-### **Semana 2: Implementación de MVVM y Pantalla de Detalle**
+## **Semana 2: Implementación de MVVM y Pantalla de Detalle**
 #### **Objetivo**
 Desarrollar una arquitectura basada en el patrón de diseño MVVM (Model-View-ViewModel) para todas las pantallas del proyecto iniciado en la semana 1. Además, implementar una nueva pantalla de detalle (`DetailActivity`) que se abrirá al seleccionar un elemento del `RecyclerView` en la pantalla principal (`DashboardActivity`). La nueva pantalla mostrará el título, la imagen y la descripción del elemento seleccionado.
 
@@ -145,13 +145,14 @@ app/
 ---
 
 #### **Entregables**
+
+**Concédeme acceso como colaborador a tu proyecto de Firebase**
 1. **Código en GitHub:**
    - Rama `semana2`.
    - Realizar commits por cada tarea completada, siguiendo la nomenclatura: `Semana2: [descripción del cambio]`.
    - Para la entrega, mergea semana2 con main.
 
 2. **Documentos y Vídeos:**
-   - Archivo JSON con los datos iniciales.
    - Video demostrativo con las siguientes funciones, mostrando la estructura del proyecto:
      - Registro de usuario.
      - Inicio de sesión.
