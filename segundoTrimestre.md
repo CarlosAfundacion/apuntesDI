@@ -379,7 +379,7 @@ app/
 #### **3. Configuraciones iniciales en Android Studio**
 
 1. **Gradle:**
-   - Habilitar Data Binding en el archivo `build.gradle` del módulo:
+   - Habilitar Data Binding en el archivo `build.gradle` de la app:
      ```gradle
      android {
          buildFeatures {
@@ -387,7 +387,20 @@ app/
          }
      }
      ```
-
+    - Modificar compileSdk y targetSdk a la versión 35 (En caso de que no esté descargada os pedirá hacerlo) en el archivo `build.gradle` de la app:
+         ```gradle
+         android {
+             namespace = "com.example.mvvm"
+             compileSdk = 35
+             defaultConfig {
+                 applicationId = "com.example.mvvm"
+                 minSdk = 26
+                 targetSdk = 35
+             ...
+             }
+         ...
+         }
+         ```
    - Agregar dependencias necesarias:
      ```gradle
      dependencies {
