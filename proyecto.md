@@ -107,7 +107,7 @@ Desarrollar una arquitectura basada en el patrón de diseño MVVM (Model-View-Vi
    - Implementar un repositorio (`DashboardRepository`) que cargue los datos desde Firebase.
    - Crear un `DashboardViewModel` que exponga los datos observables para la lista.
    - Agregar un botón de **Logout** en la parte superior que permita cerrar sesión y volver a la `LoginActivity`.
-   - Configurar un evento en el adaptador para abrir el `DetailActivity` al seleccionar un elemento.
+   - Configurar un evento en el adaptador para abrir el `DetailActivity` al seleccionar un elemento. [Ayuda de implementación](https://github.com/CarlosAfundacion/apuntesDI/blob/main/Celda%20clickable%20recyclerView.md)
 
 5. **Pantalla de Detalle (`DetailActivity`)**
    - Diseñar la interfaz del `DetailActivity` para mostrar el título, la imagen y la descripción del elemento seleccionado.
