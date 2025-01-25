@@ -112,16 +112,9 @@ El `DashboardRepository` proporciona las recetas al ViewModel utilizando Firebas
 Binding se refiere a la técnica de vincular vistas (layouts XML) con código en Java/Kotlin mediante clases generadas automáticamente por el sistema de Android. Esto permite un acceso más directo y seguro a las vistas sin necesidad de usar métodos como `findViewById`.
 
 **¿Cómo se hace?**
-1. Asegúrate de habilitar el binding en el archivo `build.gradle`:
-```gradle
-android {
-    viewBinding {
-        enabled = true
-    }
-}
-```
-2. Usa clases de binding generadas automáticamente. Por ejemplo, para un archivo XML llamado `activity_dashboard.xml`, se genera la clase `ActivityDashboardBinding`.
-3. En la clase correspondiente, infla el layout y accede a las vistas a través del objeto de binding:
+
+1. Usa clases de binding generadas automáticamente. Por ejemplo, para un archivo XML llamado `activity_dashboard.xml`, se genera la clase `ActivityDashboardBinding`.
+1. En la clase correspondiente, infla el layout y accede a las vistas a través del objeto de binding:
 
 ```java
 ActivityDashboardBinding binding = ActivityDashboardBinding.inflate(getLayoutInflater());
