@@ -172,11 +172,12 @@ En esta etapa de la práctica incremental, los estudiantes trabajarán en implem
 
 ### **Objetivos**
 
-1. Implementar un RecyclerView en el DashboardActivity que muestre todos los elementos disponibles de la base de datos de Firebase. Desde aquí debe poder navegarse a FavouritesActivity
-2. Añadir un RecyclerView en FavouritesActivity que muestre únicamente los elementos marcados como favoritos por el usuario.
-3. Integrar un botón flotante (Floating Action Button) en el DetailActivity que permita agregar o eliminar un elemento de la lista de favoritos del usuario.
-4. Mejorar la accesibilidad de las pantallas utilizando las prácticas descritas en los apuntes.
-5. Consolidar el uso del patrón MVVM para esta nueva funcionalidad.
+1. Crea un tema personalizado con Material Theme Builder y aplícalo a tu aplicación.
+2. Desde DashboardActivity debe poder navegarse a FavouritesActivity
+3. Añadir un RecyclerView en FavouritesActivity que muestre únicamente los elementos marcados como favoritos por el usuario.
+4. Integrar un botón flotante (Floating Action Button) en el DetailActivity que permita agregar o eliminar un elemento de la lista de favoritos del usuario.
+5. Mejorar la accesibilidad de las pantallas utilizando las prácticas descritas en los apuntes.
+6. Consolidar el uso del patrón MVVM para esta nueva funcionalidad.
 
 ---
 
@@ -186,7 +187,7 @@ En esta etapa de la práctica incremental, los estudiantes trabajarán en implem
 
 1. **Base de Datos:**
 
-   - Crear una estructura en Firebase para almacenar los favoritos del usuario:
+   - Crear una estructura en Firebase para almacenar los favoritos del usuario (puedes implementar directamente el código en tu app):
      ```json
      {
        "usuarios": {
@@ -226,11 +227,11 @@ En esta etapa de la práctica incremental, los estudiantes trabajarán en implem
 
 2. **Contraste:**
 
-   - Revisar y ajustar los colores en las pantallas para cumplir con las pautas de contraste de WCAG. Utilizar herramientas como **Contrast Checker**.
+   - Revisar y ajustar los colores en las pantallas para cumplir con las pautas de contraste de WCAG. Utilizar herramientas como [**Contrast Checker**](https://webaim.org/resources/contrastchecker/).
 
 3. **Pruebas de Accesibilidad:**
 
-   - Probar la aplicación con TalkBack activado para verificar que los usuarios con discapacidades visuales puedan navegar correctamente.
+   - Probar la aplicación con TalkBack (si puedes instalar el apk en tu móvil) activado para verificar que los usuarios con discapacidades visuales puedan navegar correctamente.
 
 ---
 
@@ -313,6 +314,7 @@ En esta etapa de la práctica incremental, los estudiantes trabajarán en implem
      - Agregar o eliminar favoritos desde el DetailActivity.
      - Visualización de los favoritos en el RecyclerView dedicado.
      - Pruebas de accesibilidad con TalkBack.
+     - Mostrar que los colores y fuentes de tu app superan la validación de Contrast Checker.
 
 
 ---
