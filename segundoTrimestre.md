@@ -755,6 +755,329 @@ Este archivo define la estructura básica de la actividad y habilita Data Bindin
 - **`RecyclerView`:** Componente que muestra la lista de productos.
   - El ID `@+id/recyclerView` se usa para acceder al RecyclerView desde el `ActivityMainBinding`.
 
+# **Semana 3: Desarrollo de Interfaces en Android**
+
+### 1. Accesibilidad en Apps Móviles
+
+#### Importancia
+La accesibilidad en aplicaciones móviles garantiza que personas con discapacidades visuales, auditivas, motoras o cognitivas puedan interactuar con las apps de manera efectiva.
+
+#### Normas y Principios
+- **WCAG (Web Content Accessibility Guidelines):** Proporcionan un marco de referencia para el diseño accesible.
+- **Principios básicos:**
+  - **Perceptible:** Contenido visible y claro para todos.
+  - **Operable:** Controles fáciles de usar.
+  - **Comprensible:** Interfaces intuitivas.
+  - **Robusto:** Compatible con tecnologías de asistencia.
+
+#### Buenas prácticas
+- Añadir etiquetas como **contentDescription** para lectores de pantalla. Algunos ejemplos de uso incluyen:
+  - **ImageView:** Para describir imágenes no textuales.
+    ```java
+    ImageView imageView = findViewById(R.id.sample_image);
+    imageView.setContentDescription("Descripción de la imagen");
+    ```
+  - **Button:** Para detallar acciones asociadas.
+    ```java
+    Button button = findViewById(R.id.send_button);
+    button.setContentDescription("Enviar formulario");
+    ```
+  - **EditText:** Para explicar el propósito del campo de entrada.
+    ```java
+    EditText editText = findViewById(R.id.name_field);
+    editText.setContentDescription("Campo para escribir el nombre");
+    ```
+- Asegurar un buen contraste entre texto y fondo usando herramientas como **Contrast Checker**.
+- Probar la app con lectores de pantalla (por ejemplo, TalkBack en Android).
+- Evitar el uso de colores como única señal visual.
+
+### 2. Firebase: Manejo de Tablas Relacionadas
+
+#### Introducción
+Firebase es una base de datos NoSQL ideal para gestionar relaciones simples entre tablas.
+
+#### Ejemplo de Relación de Favoritos
+##### Estructura en Firebase
+```json
+{
+  "usuarios": {
+    "usuario1": {
+      "nombre": "Juan",
+      "favoritos": ["receta1", "receta2"]
+    }
+  },
+  "recetas": {
+    "receta1": {
+      "nombre": "Tarta de manzana",
+      "ingredientes": ["manzana", "harina", "azúcar"]
+    }
+  }
+}
+```
+##### Código para manejar favoritos
+- **Agregar favorito:**
+  ```java
+  DatabaseReference userFavoritesRef = FirebaseDatabase.getInstance()
+          .getReference("usuarios/usuario1/favoritos");
+  userFavoritesRef.child("receta3").setValue(true);
+  ```
+- **Leer favoritos:**
+  ```java
+  userFavoritesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot snapshot) {
+          List<String> favorites = new ArrayList<>();
+          for (DataSnapshot child : snapshot.getChildren()) {
+              favorites.add(child.getKey());
+          }
+          // Usar los favoritos
+      }
+
+      @Override
+      public void onCancelled(DatabaseError error) {
+          // Manejo de errores
+      }
+  });
+  ```
+
+### 3. Shared Preferences
+
+#### Introducción
+Las **Shared Preferences** permiten almacenar configuraciones o datos ligeros que no necesitan una base de datos.
+
+#### Ejemplo de Uso
+- **Guardar datos:**
+  ```java
+  SharedPreferences sharedPref = getSharedPreferences("AppConfig", Context.MODE_PRIVATE);
+  SharedPreferences.Editor editor = sharedPref.edit();
+  editor.putString("username", "Juan");
+  editor.putBoolean("darkMode", true);
+  editor.apply();
+  ```
+- **Recuperar datos:**
+  ```java
+  SharedPreferences sharedPref = getSharedPreferences("AppConfig", Context.MODE_PRIVATE);
+  String username = sharedPref.getString("username", "default");
+  boolean darkMode = sharedPref.getBoolean("darkMode", false);
+  ```
+
+### 4. Uso de Recursos XML
+
+#### strings.xml
+- Permite centralizar textos para facilitar la internacionalización.
+  ```xml
+  <resources>
+      <string name="app_name">Mi App</string>
+      <string name="welcome_message">Bienvenido a la aplicación</string>
+  </resources>
+  ```
+
+#### colors.xml
+- Define colores reutilizables en toda la app.
+- Puedes ver información a cerca de los colores [aquí](https://es.goodbarber.com/blog/como-elegir-los-colores-adecuados-para-tu-aplicacion-movil-a814/).
+  ```xml
+  <resources>
+      <color name="primary">#6200EE</color>
+      <color name="primary_variant">#3700B3</color>
+      <color name="secondary">#03DAC6</color>
+  </resources>
+  ```
+- **Uso en layouts con MVVM:**
+  ```xml
+  <data>
+      <variable
+          name="viewModel"
+          type="com.example.app.ui.MainViewModel" />
+  </data>
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      android:background="@{viewModel.backgroundColor}">
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@{viewModel.welcomeMessage}" />
+  </LinearLayout>
+  ```
+
+### 5. Temas y Estilos en Android Studio
+
+#### Conceptos Básicos
+- **Estilos:** Colecciones de atributos aplicados a componentes específicos para asegurar uniformidad visual.
+  - Ejemplo: Un estilo para botones con color de fondo y texto personalizado.
+- **Temas:** Conjunto de estilos aplicados globalmente a una aplicación o actividad.
+  - Ejemplo: Tema oscuro para toda la app.
+
+#### Creación
+- Definir en **styles.xml:**
+  ```xml
+  <style name="CustomButtonStyle" parent="Widget.AppCompat.Button">
+      <item name="android:background">@color/primaryColor</item>
+      <item name="android:textColor">#FFFFFF</item>
+      <item name="android:padding">16dp</item>
+  </style>
+  ```
+- Aplicar en XML:
+  ```xml
+  <Button style="@style/CustomButtonStyle" android:text="Aceptar"/>
+  ```
+- Definir temas en **AndroidManifest.xml:**
+  ```xml
+  <application android:theme="@style/AppTheme">
+  ```
+
+#### Temas para Modo Nocturno
+- Configurar **values-night/styles.xml:**
+  ```xml
+  <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+      <item name="colorPrimary">#1A237E</item>
+      <item name="colorPrimaryVariant">#283593</item>
+      <item name="colorAccent">#FF4081</item>
+  </style>
+  ```
+
+#### Cambio de Tema con Botón
+
+Un botón puede ser usado para cambiar dinámicamente entre temas claro y oscuro en tiempo de ejecución.
+
+##### Código para cambiar tema:
+1. **Crear un tema oscuro y uno claro en styles.xml:**
+   ```xml
+   <style name="ThemeClaro" parent="Theme.MaterialComponents.Light">
+       <item name="colorPrimary">#FFFFFF</item>
+       <item name="colorOnPrimary">#000000</item>
+   </style>
+
+   <style name="ThemeOscuro" parent="Theme.MaterialComponents">
+       <item name="colorPrimary">#000000</item>
+       <item name="colorOnPrimary">#FFFFFF</item>
+   </style>
+   ```
+
+2. **Cambiar el tema en el botón dinámicamente:**
+   ```java
+   Button themeButton = findViewById(R.id.themeButton);
+   themeButton.setOnClickListener(view -> {
+       boolean isDarkMode = getSharedPreferences("AppConfig", Context.MODE_PRIVATE)
+               .getBoolean("darkMode", false);
+       SharedPreferences.Editor editor = getSharedPreferences("AppConfig", Context.MODE_PRIVATE).edit();
+       editor.putBoolean("darkMode", !isDarkMode);
+       editor.apply();
+
+       setTheme(!isDarkMode ? R.style.ThemeOscuro : R.style.ThemeClaro);
+       recreate();
+   });
+   ```
+3. **Botón en el XML:**
+   ```xml
+   <Button
+       android:id="@+id/themeButton"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Cambiar Tema"/>
+   ```
+
+### 6. Introducción a Material Design
+
+Material Design es un sistema de diseño desarrollado por Google que proporciona un lenguaje visual unificado para crear interfaces consistentes y atractivas. Combina principios del diseño clásico con innovación tecnológica para garantizar experiencias de usuario intuitivas y fluidas.
+
+#### Principios Fundamentales de Material Design
+1. **Jerarquía Visual:**
+   - Utiliza colores, tamaños y posiciones para dirigir la atención del usuario hacia elementos importantes.
+2. **Movimiento Significativo:**
+   - Las transiciones y animaciones deben ser fluidas y reflejar la interacción del usuario.
+3. **Diseño Adaptativo:**
+   - Las interfaces deben ajustarse a diferentes tamaños de pantalla y orientaciones.
+4. **Consistencia:**
+   - Usa componentes estándar para que el usuario pueda anticipar el comportamiento de la interfaz.
+
+#### Cómo Aplicar Material Design
+1. **Configurar el Tema Base:**
+   - En el archivo `styles.xml`, define un tema base que herede de **MaterialComponents.**
+   ```xml
+   <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+       <item name="colorPrimary">@color/primary</item>
+       <item name="colorPrimaryVariant">@color/primaryDark</item>
+       <item name="colorAccent">@color/accent</item>
+   </style>
+   ```
+2. **Integrar Componentes Clave:**
+   - **AppBarLayout:** Barra superior para mostrar el título y acciones principales.
+     ```xml
+     <com.google.android.material.appbar.AppBarLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content">
+         <com.google.android.material.appbar.MaterialToolbar
+             android:id="@+id/toolbar"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             app:title="Material Design Demo" />
+     </com.google.android.material.appbar.AppBarLayout>
+     ```
+   - **Floating Action Button (FAB):** Botón para la acción principal de la pantalla.
+     ```xml
+     <com.google.android.material.floatingactionbutton.FloatingActionButton
+         android:id="@+id/fab"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:src="@drawable/ic_add"
+         app:layout_anchor="@id/app_bar"
+         app:layout_anchorGravity="bottom|end" />
+     ```
+   - **Snackbars:** Mensajes breves e informativos.
+     ```java
+     Snackbar.make(findViewById(android.R.id.content), "Acción realizada correctamente", Snackbar.LENGTH_SHORT).show();
+     ```
+
+3. **Colores y Tipografías:**
+   - Define los colores en el archivo `colors.xml` para garantizar consistencia.
+     ```xml
+     <color name="primary">#6200EE</color>
+     <color name="primaryDark">#3700B3</color>
+     <color name="accent">#03DAC6</color>
+     ```
+   - Usa la tipografía recomendada por Material Design.
+     ```xml
+     <style name="TextAppearance.MaterialComponents.Body1">
+         <item name="fontFamily">sans-serif</item>
+         <item name="android:textSize">16sp</item>
+     </style>
+     ```
+
+4. **Diseño Adaptativo:**
+   - Utiliza **ConstraintLayout** para garantizar que los elementos de la interfaz se adapten a diferentes tamaños de pantalla.
+
+5. **Iconografía:**
+   - Usa íconos estándar de Google Material Icons o define los tuyos propios.
+     ```xml
+     <ImageView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:src="@drawable/ic_launcher" />
+     ```
+
+#### Buenas Prácticas con Material Design
+- **Feedback Visual:** Proporciona respuestas inmediatas a las acciones del usuario mediante cambios visuales como animaciones o cambios de color.
+- **Consistencia en el Diseño:** Usa componentes de Material Design en todas las pantallas para unificar la experiencia.
+- **Pruebas de Usabilidad:** Asegúrate de que tu diseño sea claro, intuitivo y accesible para todo tipo de usuarios.
+
+#### Recursos Útiles
+- [Guía oficial de Material Design](https://material.io/design)
+- [Componentes de Material Design para Android](https://developer.android.com/jetpack/androidx/releases/material)
+- [Herramienta de comprobación de accesibilidad](https://accessibilityinsights.io/)
+
+
+### 7. Buenas Prácticas
+- **Diseño modular:** Facilita cambios y mantenimiento.
+- **Validación:** Usa herramientas como las de Android Studio para verificar accesibilidad y consistencia visual.
+- **Pruebas:** Asegúrate de probar en múltiples dispositivos y resoluciones.
+- **Organización:** Mantén el código y recursos estructurados y limpios.
+
+
+
 
 
 
