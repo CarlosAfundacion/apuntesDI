@@ -1058,6 +1058,106 @@ Material Design es un sistema de diseño desarrollado por Google que proporciona
          android:layout_height="wrap_content"
          android:src="@drawable/ic_launcher" />
      ```
+#### Cómo usar temas generados con Material Theme Builder:
+Accede a la página de [Material Theme Builder](https://material-foundation.github.io/material-theme-builder/) y edita tu propio tema. Una vez terminado, exportalo como `Android Views (XML)`.
+PAra usar el tema exportado desde **Material Theme Builder**, sigue estos pasos para integrarlos en tu proyecto en Android Studio:
+
+---
+
+### **1. Coloca los archivos exportados en tu proyecto**
+1. En **Android Studio**, navega hasta la carpeta `res/values` de tu proyecto:
+   - Si no tienes la carpeta `values` (poco probable), créala en `res/`.
+
+2. Copia los archivos exportados (`colors.xml`, `theme_overlays.xml` y `themes.xml`) dentro de la carpeta `res/values`.
+
+---
+
+### **2. Estructura de los archivos**
+Después de copiarlos, deberían verse más o menos así:
+
+#### **colors.xml**
+Define los colores base y las variantes generadas por **Material Theme Builder**:
+
+```xml
+<resources>
+    <color name="md_theme_light_primary">#6200EE</color>
+    <color name="md_theme_light_onPrimary">#FFFFFF</color>
+    <color name="md_theme_light_secondary">#03DAC6</color>
+    <!-- Otros colores -->
+</resources>
+```
+
+#### **themes.xml**
+Define el tema base y los atributos asociados:
+
+```xml
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.MyApp" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/md_theme_light_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
+        <item name="colorSecondary">@color/md_theme_light_secondary</item>
+        <!-- Otros atributos -->
+    </style>
+</resources>
+```
+
+#### **theme_overlays.xml**
+Proporciona configuraciones adicionales como temas oscuros (opcional).
+
+```xml
+<resources>
+    <style name="ThemeOverlay.MyApp.Dark" parent="ThemeOverlay.Material3.Dark">
+        <item name="colorPrimary">@color/md_theme_dark_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_dark_onPrimary</item>
+    </style>
+</resources>
+```
+
+---
+
+### **3. Configura el tema en `AndroidManifest.xml`**
+1. Abre el archivo `AndroidManifest.xml`.
+2. Busca el atributo `android:theme` dentro de la etiqueta `<application>` y cámbialo para que apunte al tema que acabas de importar (`Theme.MyApp`):
+
+```xml
+<application
+    android:theme="@style/Theme.MyApp"
+    ... >
+```
+
+---
+
+### **4. Ajusta el tema en tus layouts**
+En los archivos de diseño XML (`activity_main.xml`, etc.), asegúrate de que los colores definidos se aplican automáticamente. Si necesitas especificar colores en algún componente, usa los valores definidos en `colors.xml`. Por ejemplo:
+
+```xml
+<Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Hola"
+    android:backgroundTint="?attr/colorPrimary"
+    android:textColor="?attr/colorOnPrimary" />
+```
+
+---
+
+### **5. Prueba el tema**
+1. Ejecuta la aplicación para comprobar cómo se aplican los colores en tu UI.
+2. Si quieres probar el tema oscuro:
+   - Entra en las **opciones de desarrollador** del emulador/dispositivo y activa el modo oscuro.
+   - El tema definido en `theme_overlays.xml` debería aplicarse automáticamente.
+
+---
+
+### **6. Personalizaciones adicionales**
+Si necesitas realizar cambios en los colores o temas después de la integración:
+- Modifica directamente los valores en `colors.xml`, `themes.xml` o `theme_overlays.xml`.
+- Usa el **Theme Editor** de Android Studio:
+  - Haz clic en `res/values/themes.xml`.
+  - Selecciona **Open in Theme Editor** en la esquina superior derecha.
+
+---
+
 
 #### Buenas Prácticas con Material Design
 - **Feedback Visual:** Proporciona respuestas inmediatas a las acciones del usuario mediante cambios visuales como animaciones o cambios de color.
