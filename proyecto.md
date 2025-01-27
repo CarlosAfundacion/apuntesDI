@@ -164,5 +164,164 @@ app/
    - Enlace al repositorio.
    - Archivo comprimido con el proyecto de Android Studio.
 
+## Semana 3: Gestión de Favoritos, Accesibilidad y Configuración de Preferencias
+
+En esta etapa de la práctica incremental, los estudiantes trabajarán en implementar funcionalidades relacionadas con la gestión de favoritos y prácticas de accesibilidad en su aplicación móvil. A continuación, se describen los objetivos, tareas y entregables de esta semana.
+
+---
+
+### **Objetivos**
+
+1. Implementar un RecyclerView en el DashboardActivity que muestre todos los elementos disponibles de la base de datos de Firebase. Desde aquí debe poder navegarse a FavouritesActivity
+2. Añadir un RecyclerView en FavouritesActivity que muestre únicamente los elementos marcados como favoritos por el usuario.
+3. Integrar un botón flotante (Floating Action Button) en el DetailActivity que permita agregar o eliminar un elemento de la lista de favoritos del usuario.
+4. Mejorar la accesibilidad de las pantallas utilizando las prácticas descritas en los apuntes.
+5. Consolidar el uso del patrón MVVM para esta nueva funcionalidad.
+
+---
+
+### **Tareas**
+
+#### **1. Gestión de Favoritos**
+
+1. **Base de Datos:**
+
+   - Crear una estructura en Firebase para almacenar los favoritos del usuario:
+     ```json
+     {
+       "usuarios": {
+         "usuario1": {
+           "favoritos": ["idElemento1", "idElemento2"]
+         }
+       }
+     }
+     ```
+   - Configurar las reglas de seguridad para asegurar que cada usuario solo pueda acceder a sus favoritos.
+
+2. **Floating Action Button en DetailActivity:**
+
+   - Diseñar el botón flotante y agregarlo al layout.
+   - Implementar la funcionalidad para:
+     - Agregar el elemento actual a la lista de favoritos del usuario en Firebase si no está presente.
+     - Eliminarlo si ya está en la lista.
+   - Actualizar dinámicamente el estado del botón flotante (e.g., cambiar su ícono dependiendo de si el elemento es favorito o no).
+
+3. **RecyclerView para Favoritos:**
+
+   - Crear un nuevo RecyclerView en el FavouritesActivity que muestre los favoritos del usuario.
+   - Diseñar un adaptador específico para esta lista.
+   - Observar los cambios en la base de datos en tiempo real y actualizar el RecyclerView dinámicamente.
+
+4. **DashboardActivity:**
+
+   - Añadir navegación a FavouritesActivity.
+
+---
+
+#### **2. Accesibilidad**
+
+1. **contentDescription:**
+
+   - Añadir descripciones en todos los componentes interactivos (e.g., botones, imágenes) para soportar lectores de pantalla como TalkBack.
+
+2. **Contraste:**
+
+   - Revisar y ajustar los colores en las pantallas para cumplir con las pautas de contraste de WCAG. Utilizar herramientas como **Contrast Checker**.
+
+3. **Pruebas de Accesibilidad:**
+
+   - Probar la aplicación con TalkBack activado para verificar que los usuarios con discapacidades visuales puedan navegar correctamente.
+
+---
+
+#### **3. Integración con MVVM**
+
+1. **ViewModels:**
+
+   - Crear o actualizar los ViewModels necesarios para gestionar las listas de elementos y favoritos.
+   - Implementar LiveData u otros mecanismos de observación para que las vistas reaccionen automáticamente a los cambios en los datos.
+
+2. **Repositorios:**
+
+   - Crear métodos en los repositorios para leer y escribir en la base de datos de favoritos.
+
+---
+
+#### **4. Uso de Shared Preferences y Dark Mode**
+
+1. **Shared Preferences para Configuración del Modo Oscuro:**
+
+   - Implementar una opción en el menú de configuración para habilitar o deshabilitar el modo oscuro utilizando Shared Preferences.
+   - Guardar el estado del modo oscuro (activado/desactivado) en Shared Preferences.
+   - Recuperar el estado al iniciar la aplicación y aplicar el tema correspondiente.
+
+2. **Cambio de Tema Dinámico:**
+
+   - Diseñar dos temas diferentes en `styles.xml`: uno claro y otro oscuro.
+   - Crear un botón en el DashboardActivity para alternar entre los modos claro y oscuro.
+   - Usar Shared Preferences para guardar la selección del usuario y aplicar dinámicamente el tema seleccionado.
+
+3. **Ejemplo de Código:**
+
+   - Guardar preferencia:
+     ```java
+     SharedPreferences sharedPref = getSharedPreferences("AppConfig", Context.MODE_PRIVATE);
+     SharedPreferences.Editor editor = sharedPref.edit();
+     editor.putBoolean("darkMode", true); // Cambiar a false si se desactiva
+     editor.apply();
+     ```
+   - Recuperar preferencia al iniciar:
+     ```java
+     SharedPreferences sharedPref = getSharedPreferences("AppConfig", Context.MODE_PRIVATE);
+     boolean darkMode = sharedPref.getBoolean("darkMode", false);
+     if (darkMode) {
+         setTheme(R.style.DarkTheme);
+     } else {
+         setTheme(R.style.LightTheme);
+     }
+     ```
+   - Cambiar tema dinámicamente:
+     ```java
+     Button themeButton = findViewById(R.id.themeButton);
+     themeButton.setOnClickListener(view -> {
+         boolean isDarkMode = sharedPref.getBoolean("darkMode", false);
+         SharedPreferences.Editor editor = sharedPref.edit();
+         editor.putBoolean("darkMode", !isDarkMode);
+         editor.apply();
+         recreate();
+     });
+     ```
+
+4. **Pruebas de Modo Oscuro:**
+
+   - Verificar que el cambio de tema se aplica correctamente en todas las pantallas.
+   - Asegurarse de que los colores y elementos visuales cumplen con los estándares de contraste tanto en modo claro como oscuro.
+
+---
+
+### **Entregables**
+
+1. **Repositorio GitHub:**
+
+   - Código subido a la rama `semana3`.
+   - Commits con mensajes descriptivos que comiencen por: `Semana3: [descripción]`.
+
+2. **Vídeo:**
+
+   - Mostrar la funcionalidad:
+     - Prueba del modo oscuro
+     - Agregar o eliminar favoritos desde el DetailActivity.
+     - Visualización de los favoritos en el RecyclerView dedicado.
+     - Pruebas de accesibilidad con TalkBack.
+
+
+---
+
+### **Recursos Adicionales**
+
+- [Guía oficial de RecyclerView](https://developer.android.com/guide/topics/ui/layout/recyclerview)
+- [Firebase Realtime Database](https://firebase.google.com/docs/database/android/start)
+- [Accesibilidad en Android](https://developer.android.com/guide/topics/ui/accessibility)
+
 
 
