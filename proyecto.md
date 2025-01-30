@@ -173,11 +173,12 @@ En esta etapa de la práctica incremental, los estudiantes trabajarán en implem
 ### **Objetivos**
 
 1. Crea un tema personalizado con Material Theme Builder y aplícalo a tu aplicación.
-2. Desde DashboardActivity debe poder navegarse a FavouritesActivity
-3. Añadir un RecyclerView en FavouritesActivity que muestre únicamente los elementos marcados como favoritos por el usuario.
-4. Integrar un botón flotante (Floating Action Button) en el DetailActivity que permita agregar o eliminar un elemento de la lista de favoritos del usuario.
-5. Mejorar la accesibilidad de las pantallas utilizando las prácticas descritas en los apuntes. Añade el contentDescription a las imágenes del RecyclerView
-6. Consolidar el uso del patrón MVVM para esta nueva funcionalidad.
+2. Añade un botón o switch para activar y desactivar el DarkMode en tu aplcicación.
+3. Desde DashboardActivity debe poder navegarse a FavouritesActivity
+4. Añadir un RecyclerView en FavouritesActivity que muestre únicamente los elementos marcados como favoritos por el usuario.
+5. Integrar un botón flotante (Floating Action Button) en el DetailActivity que permita agregar o eliminar un elemento de la lista de favoritos del usuario.
+6. Mejorar la accesibilidad de las pantallas utilizando las prácticas descritas en los apuntes. Añade el contentDescription a las imágenes del RecyclerView
+7. Consolidar el uso del patrón MVVM para esta nueva funcionalidad.
 
 ---
 
