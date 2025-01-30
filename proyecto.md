@@ -259,7 +259,7 @@ En esta etapa de la práctica incremental, los estudiantes trabajarán en implem
 
 2. **Cambio de Tema Dinámico:**
 
-   - Diseñar dos temas diferentes en `styles.xml`: uno claro y otro oscuro.
+   - Usa los temas que exportaste de Material Theme Builder, si los temas App
    - Crear un botón en el DashboardActivity para alternar entre los modos claro y oscuro.
    - Usar Shared Preferences para guardar la selección del usuario y aplicar dinámicamente el tema seleccionado.
 
@@ -277,9 +277,11 @@ En esta etapa de la práctica incremental, los estudiantes trabajarán en implem
      SharedPreferences sharedPref = getSharedPreferences("AppConfig", Context.MODE_PRIVATE);
      boolean darkMode = sharedPref.getBoolean("darkMode", false);
      if (darkMode) {
-         setTheme(R.style.DarkTheme);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        recreate(); // recrea la activity para que se aplique el tema sin reiniciar.
      } else {
-         setTheme(R.style.LightTheme);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        recreate(); // recrea la activity para que se aplique el tema sin reiniciar.
      }
      ```
    - Cambiar tema dinámicamente:
