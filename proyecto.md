@@ -176,7 +176,7 @@ En esta etapa de la práctica incremental, los estudiantes trabajarán en implem
 2. Desde DashboardActivity debe poder navegarse a FavouritesActivity
 3. Añadir un RecyclerView en FavouritesActivity que muestre únicamente los elementos marcados como favoritos por el usuario.
 4. Integrar un botón flotante (Floating Action Button) en el DetailActivity que permita agregar o eliminar un elemento de la lista de favoritos del usuario.
-5. Mejorar la accesibilidad de las pantallas utilizando las prácticas descritas en los apuntes.
+5. Mejorar la accesibilidad de las pantallas utilizando las prácticas descritas en los apuntes. Añade el contentDescription a las imágenes del RecyclerView
 6. Consolidar el uso del patrón MVVM para esta nueva funcionalidad.
 
 ---
@@ -223,7 +223,7 @@ En esta etapa de la práctica incremental, los estudiantes trabajarán en implem
 
 1. **contentDescription:**
 
-   - Añadir descripciones en todos los componentes interactivos (e.g., botones, imágenes) para soportar lectores de pantalla como TalkBack.
+   - Añadir descripciones en todas las imágenes del RecyclerView para soportar lectores de pantalla como TalkBack.
 
 2. **Contraste:**
 
@@ -231,7 +231,7 @@ En esta etapa de la práctica incremental, los estudiantes trabajarán en implem
 
 3. **Pruebas de Accesibilidad:**
 
-   - Probar la aplicación con TalkBack (si puedes instalar el apk en tu móvil) activado para verificar que los usuarios con discapacidades visuales puedan navegar correctamente.
+   - Probar la aplicación con TalkBack activado para verificar que los usuarios con discapacidades visuales puedan navegar correctamente y escuchar las descripciones de las imágenes. Para configurar TalkBack en Android Studio, sigue los siguientes [pasos](https://github.com/CarlosAfundacion/apuntesDI/blob/main/TalkBack.md)
 
 ---
 
