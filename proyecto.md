@@ -316,7 +316,6 @@ En esta etapa de la práctica incremental, los estudiantes trabajarán en implem
      - Prueba del modo oscuro
      - Agregar o eliminar favoritos desde el DetailActivity.
      - Visualización de los favoritos en el RecyclerView dedicado.
-     - Pruebas de accesibilidad con TalkBack.
      - Mostrar que los colores y fuentes de tu app superan la validación de Contrast Checker.
 
 
@@ -328,5 +327,594 @@ En esta etapa de la práctica incremental, los estudiantes trabajarán en implem
 - [Firebase Realtime Database](https://firebase.google.com/docs/database/android/start)
 - [Accesibilidad en Android](https://developer.android.com/guide/topics/ui/accessibility)
 
+# Semana 4: Migración a Fragments, Navigation Drawer y Configuración de Usuario
+
+## 1. Introducción y Contexto
+
+Hasta la Semana 3 habíamos creado varias Activities, cada una con su funcionalidad:
+- `DashboardActivity` (lista principal de elementos).
+- `FavouritesActivity` (lista de favoritos).
+- `DetailActivity` (detalle de un elemento).
+- Otras pantallas como `LoginActivity` y `RegisterActivity`.
+
+Ahora, el objetivo es:
+1. **Reemplazar** algunas de estas pantallas por **Fragments**.
+2. Utilizar un **Navigation Drawer** (o menú lateral) para navegar fácilmente entre ellas.
+3. Añadir una **pantalla de configuración de usuario** (o `ProfileFragment`) que permita cambiar la contraseña y alternar el modo claro/oscuro.
+4. Incluir la opción de **Logout** en el menú lateral, que cierre sesión en Firebase y lleve de vuelta a la pantalla de Login.
+
+Este enfoque mejora la arquitectura, reduce código duplicado y ofrece una navegación más fluida para el usuario.
+
+---
+
+## 2. Migración de Activities a Fragments
+
+En las semanas anteriores, cada pantalla estaba implementada como una Activity independiente. Ahora migraremos las siguientes a Fragments:
+
+- `DashboardFragment` (en lugar de `DashboardActivity`)
+- `FavouritesFragment` (en lugar de `FavouritesActivity`)
+- `DetailFragment` (en lugar de `DetailActivity`)
+- `ProfileFragment` (pantalla de usuario: cambio de contraseña, cambio de tema, etc.)
+
+### 2.1. Creación de Fragments
+
+En tu carpeta `views`, crea archivos Java para cada Fragment. Por ejemplo, en Java:
+
+```java
+public class DashboardFragment extends Fragment {
+    // Constructor vacío
+    public DashboardFragment() { }
+
+    // Se infla el layout del fragment
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Infla el layout del fragment
+        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        // Aquí configuras RecyclerView, adapters, etc.
+        return view;
+    }
+}
+```
+
+- **Inflar Layout**: Apunta a un layout XML que será `fragment_dashboard.xml`.  
+- Haz lo mismo para `FavouritesFragment`, `ProfileFragment` y `DetailFragment`.
+
+> **Nota**: El contenido que tenías en tu antigua `DashboardActivity` (RecyclerView, Adaptador, etc.) se mueve ahora dentro de `DashboardFragment`, adaptado al ciclo de vida de un Fragment.
+
+### 2.2. Layouts para cada Fragment
+
+Crea (o copia) los layouts en `res/layout/`:
+- `fragment_dashboard.xml`
+- `fragment_favourites.xml`
+- `fragment_profile.xml`
+- `fragment_detail.xml`
+
+Por ejemplo, `fragment_dashboard.xml` podría incluir tu `RecyclerView` principal:
+
+```xml
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <!-- Si usas DataBinding, puedes declarar variables o ViewModel aquí -->
+    </data>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dashboardRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+            
+    </LinearLayout>
+</layout>
+```
+
+---
+
+## 3. Creación de una MainActivity con Navigation Drawer
+
+Ahora necesitamos una **Activity contenedora** que muestre estos Fragments. El patrón más común es un `Navigation Drawer`.
+
+### 3.1. Estructura XML del Navigation Drawer
+
+1. Crea o edita el layout de tu `MainActivity`: `res/layout/activity_main.xml`.
+2. Incluye un `DrawerLayout` (contenedor principal) y dentro, un contenedor para tu **Fragment** principal y el `NavigationView`:
+
+```xml
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <!-- Si usas Data Binding, declara variables/objetc-->
+    </data>
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        
+        <!-- Contenedor principal para el Fragment -->
+        <FrameLayout
+            android:id="@+id/fragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- NavigationView con el menú lateral -->
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navigationView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:menu="@menu/drawer_menu" />
+            
+    </androidx.drawerlayout.widget.DrawerLayout>
+</layout>
+```
+
+- `DrawerLayout`: Layout raíz que contiene todo.
+- `FrameLayout`: Donde vamos colocando los **Fragments** cuando el usuario selecciona alguna sección.
+- `NavigationView`: Muestra las opciones del Drawer, referenciando un archivo de menú (ej. `drawer_menu.xml`).
+
+### 3.2. Menú del Drawer: `res/menu/drawer_menu.xml`
+
+Crea el menú del Drawer:
+
+```xml
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_dashboard"
+        android:title="Dashboard"
+        android:icon="@drawable/ic_dashboard" />
+
+    <item
+        android:id="@+id/nav_favourites"
+        android:title="Favoritos"
+        android:icon="@drawable/ic_favorite" />
+
+    <item
+        android:id="@+id/nav_profile"
+        android:title="Perfil"
+        android:icon="@drawable/ic_person" />
+
+    <item
+        android:id="@+id/nav_logout"
+        android:title="Cerrar Sesión"
+        android:icon="@drawable/ic_logout" />
+</menu>
+```
+
+- Ajusta los `drawable/` de iconos a tu preferencia.
+
+### 3.3. Lógica en MainActivity
+
+Crea tu `MainActivity` y vincúlala al layout. Ejemplo con Data Binding:
+
+```java
+public class MainActivity extends AppCompatActivity {
+
+    private ActivityMainBinding binding;  // DataBinding
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        
+        // Manejamos los eventos del menú lateral
+        binding.navigationView.setNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.nav_dashboard:
+                    openFragment(new DashboardFragment());
+                    break;
+                case R.id.nav_favourites:
+                    openFragment(new FavouritesFragment());
+                    break;
+                case R.id.nav_profile:
+                    openFragment(new ProfileFragment());
+                    break;
+                case R.id.nav_logout:
+                    logoutUser();
+                    break;
+            }
+            // Al pulsar en un ítem, cerramos el drawer
+            binding.drawerLayout.closeDrawers();
+            return true;
+        });
+
+        // Cargar por defecto el DashboardFragment
+        if (savedInstanceState == null) {
+            openFragment(new DashboardFragment());
+        }
+    }
+
+    private void openFragment(Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainer, fragment)
+                .commit();
+    }
+
+    private void logoutUser() {
+        FirebaseAuth.getInstance().signOut();
+        // Redireccionar a LoginActivity
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish(); // Para que no pueda volver con el botón atrás
+    }
+}
+```
+
+**Puntos clave**:
+- `navigationView.setNavigationItemSelectedListener(...)`: Detecta cuándo se pulsa un ítem en el Drawer y ejecuta la acción correspondiente.
+- `openFragment(...)`: Realiza el `replace` del contenedor (`fragmentContainer`) con el Fragment que deseamos.
+- `logoutUser()`: Cierra sesión de Firebase y dirige al usuario a `LoginActivity`.
+
+---
+
+## 4. Implementación de la Pantalla de Perfil (ProfileFragment)
+
+Una de las novedades es el **cambio de contraseña** y la configuración de **tema**. Vamos a centralizar esto en un `ProfileFragment`.
+
+### 4.1. Layout de `fragment_profile.xml`
+
+Ejemplo sencillo:
+
+```xml
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <!-- ViewModel o variables de Data Binding, si aplicas -->
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+        
+        <!-- Campos para cambio de contraseña -->
+        <EditText
+            android:id="@+id/currentPasswordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Contraseña actual"
+            android:inputType="textPassword"/>
+
+        <EditText
+            android:id="@+id/newPasswordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nueva contraseña"
+            android:inputType="textPassword"/>
+
+        <Button
+            android:id="@+id/changePasswordButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cambiar contraseña"/>
+
+        <!-- Switch para modo claro/oscuro -->
+        <Switch
+            android:id="@+id/darkModeSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Modo oscuro"/>
+
+    </LinearLayout>
+</layout>
+```
+
+### 4.2. Lógica de cambio de contraseña en ProfileFragment
+
+```java
+public class ProfileFragment extends Fragment {
+
+    private EditText currentPasswordEditText, newPasswordEditText;
+    private Switch darkModeSwitch;
+
+    public ProfileFragment() { }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        currentPasswordEditText = view.findViewById(R.id.currentPasswordEditText);
+        newPasswordEditText = view.findViewById(R.id.newPasswordEditText);
+        darkModeSwitch = view.findViewById(R.id.darkModeSwitch);
+
+        // Estado inicial del switch (obtener de SharedPreferences)
+        SharedPreferences prefs = requireActivity().getSharedPreferences("AppConfig", Context.MODE_PRIVATE);
+        boolean isDarkMode = prefs.getBoolean("darkMode", false);
+        darkModeSwitch.setChecked(isDarkMode);
+
+        // Listener para botón "Cambiar contraseña"
+        Button changePasswordButton = view.findViewById(R.id.changePasswordButton);
+        changePasswordButton.setOnClickListener(v -> changePassword());
+
+        // Listener para alternar modo oscuro/claro
+        darkModeSwitch.setOnCheckedChangeListener((compoundButton, checked) -> toggleDarkMode(checked));
+
+        return view;
+    }
+
+    private void changePassword() {
+        String currentPass = currentPasswordEditText.getText().toString();
+        String newPass = newPasswordEditText.getText().toString();
+
+        // Primero reautenticar al usuario (opcional) o directamente update:
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null && !newPass.isEmpty()) {
+            // EJEMPLO: reautenticación con la credencial actual (si quieres ser estricto con la seguridad)
+            AuthCredential credential = EmailAuthProvider
+                    .getCredential(user.getEmail(), currentPass);
+
+            user.reauthenticate(credential).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    user.updatePassword(newPass).addOnCompleteListener(updateTask -> {
+                        if (updateTask.isSuccessful()) {
+                            Toast.makeText(getContext(), "Contraseña cambiada con éxito", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "Error al cambiar la contraseña", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    Toast.makeText(getContext(), "La contraseña actual no es correcta", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    private void toggleDarkMode(boolean enableDarkMode) {
+        // Guardamos la preferencia
+        SharedPreferences prefs = requireActivity().getSharedPreferences("AppConfig", Context.MODE_PRIVATE);
+        prefs.edit().putBoolean("darkMode", enableDarkMode).apply();
+
+        // Aplicamos el tema
+        if (enableDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+        // Recreamos la activity para que se aplique el cambio
+        requireActivity().recreate();
+    }
+}
+```
+
+**Explicaciones clave**:
+- Para cambiar la contraseña en Firebase se usa `user.updatePassword(newPassword)`.
+- O, más recomendable, se pide la contraseña actual y se reautentica con `user.reauthenticate(...)` antes de actualizar.
+- El modo oscuro se controla con `AppCompatDelegate.setDefaultNightMode(...)`; guardamos el estado en `SharedPreferences` y `recreate()` la Activity para que recargue el tema.
+
+---
+
+## 5. Navegación al DetailFragment desde el RecyclerView (DashboardFragment)
+
+En la semana anterior, el `DashboardActivity` abría un `DetailActivity` con un Intent. Ahora, dentro de tu `DashboardFragment`, cuando el usuario pulse un ítem, reemplazamos el Fragment actual por el `DetailFragment`.
+
+### 5.1. Pasar datos al DetailFragment
+
+Para pasar datos a un fragment, se suelen usar **Bundle**:
+
+```java
+public class DashboardFragment extends Fragment {
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+
+        RecyclerView recyclerView = view.findViewById(R.id.dashboardRecyclerView);
+        // Configura layout manager, adapter, etc.
+
+        // Ejemplo de adapter con callback al pulsar un ítem
+        MyAdapter adapter = new MyAdapter(item -> {
+            // Al hacer click en un ítem del RecyclerView
+            DetailFragment detailFragment = new DetailFragment();
+
+            // Pasar datos con un Bundle
+            Bundle bundle = new Bundle();
+            bundle.putString("ITEM_ID", item.getId());
+            detailFragment.setArguments(bundle);
+
+            // Reemplazar el fragment
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainer, detailFragment)
+                    .addToBackStack(null) // Permite volver con el botón "atrás"
+                    .commit();
+        });
+
+        recyclerView.setAdapter(adapter);
+
+        return view;
+    }
+}
+```
+
+### 5.2. Recibir datos en DetailFragment
+
+En tu `DetailFragment`:
+
+```java
+public class DetailFragment extends Fragment {
+
+    private String itemId;  // ID del elemento a mostrar
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_detail, container, false);
+
+        // Recuperar argumentos
+        if (getArguments() != null) {
+            itemId = getArguments().getString("ITEM_ID");
+        }
+
+        // A partir de itemId, carga datos de Firebase o en tu ViewModel
+        // Ejemplo: detailViewModel.loadItem(itemId);
+
+        return view;
+    }
+}
+```
+
+De esta forma, la navegación a la pantalla de detalle ya no se hace con un Intent, sino con transacciones de Fragments y Bundle.
+
+---
+
+## 6. Logout desde el Drawer
+
+En la sección `navigationView.setNavigationItemSelectedListener(...)` de `MainActivity` incluimos el caso `R.id.nav_logout` con la llamada:
+
+```java
+private void logoutUser() {
+    FirebaseAuth.getInstance().signOut();
+    Intent intent = new Intent(this, LoginActivity.class);
+    startActivity(intent);
+    finish();
+}
+```
+
+Esto cerrará la sesión y volverá a la pantalla de `LoginActivity`, que ya tenías en semanas anteriores.
+
+---
+
+## 7. Consolidación de MVVM
+
+Asegúrate de mantener la **arquitectura** ya establecida:
+- **ViewModels** para cada fragment si manejan lógicas diferentes (por ejemplo, `DashboardViewModel`, `FavouritesViewModel`).
+- **Repositorios** centralizando la comunicación con Firebase.
+- **Models** representando tus datos (`Recipe`, `Game`, `Contact`, etc.).
+- Las **Vistas (Fragments)** interactúan con sus ViewModels mediante `LiveData`.
+
+### 7.1. Ejemplo de un Fragment con MVVM
+
+Supongamos `DashboardFragment` usa un `DashboardViewModel`:
+
+```java
+public class DashboardFragment extends Fragment {
+    private DashboardViewModel viewModel;
+    private RecyclerView recyclerView;
+    private MyAdapter adapter;
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+
+        // Configurar RecyclerView
+        recyclerView = view.findViewById(R.id.dashboardRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new MyAdapter(item -> {/* Navegar a detalle... */});
+        recyclerView.setAdapter(adapter);
+
+        // Obtener ViewModel
+        viewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+        // Observar cambios en la lista
+        viewModel.getItemsLiveData().observe(getViewLifecycleOwner(), items -> {
+            adapter.setItems(items);
+            adapter.notifyDataSetChanged();
+        });
+
+        return view;
+    }
+}
+```
+
+- `getViewLifecycleOwner()` en Fragments se usa para observar LiveData sin fugas de memoria.
+- `DashboardViewModel` podría cargar la lista desde Firebase a través de un `DashboardRepository`.
+
+---
+
+## 8. Ajustes Finales y Buenas Prácticas
+
+1. **Accesibilidad**: Revisa que tus Fragments mantengan `contentDescription` en las imágenes, buen contraste, etc. (Semana 3).
+2. **Material Theme**: Si usas Material Theme Builder, confirma que tanto el **modo claro** como el **oscuro** se apliquen correctamente en el `MainActivity`.
+3. **Back Stack**: Cuando navegues a un `DetailFragment`, a veces querrás usar `addToBackStack(null)` en la transacción para permitir que el usuario regrese al fragmento anterior con el botón de retroceso.
+
+---
+
+## 9. Resumen de Pasos
+
+1. **Crear/editar** la `MainActivity` con un `DrawerLayout` y un `NavigationView`.  
+2. **Definir** el menú del Drawer en `res/menu/drawer_menu.xml`.  
+3. **Migrar** `DashboardActivity`, `FavouritesActivity`, `DetailActivity` a sus correspondientes Fragments.  
+4. **Crear** el `ProfileFragment` para el usuario: 
+   - Cambio de contraseña con `FirebaseAuth`.
+   - Toggle de tema oscuro/claro con `SharedPreferences` y `AppCompatDelegate`.
+5. **Configurar** la navegación en `MainActivity`:
+   - `openFragment(...)` para reemplazar el contenedor.  
+   - `logoutUser()` para cerrar sesión.  
+6. **Probar** la navegación:
+   - Seleccionar Dashboard, Favoritos, Perfil, etc.
+   - Realizar logout y volver al Login.  
+7. **Mantener** la lógica MVVM (ViewModels + Repositorios).  
+8. **Verificar** accesibilidad y tema (claro/oscuro).  
+
+Con esto habrás logrado una estructura más robusta, fácilmente escalable, con navegación centralizada y buenas prácticas de arquitectura.
+
+---
+### **Enunciado Semana 4: Migración a Fragments, Navigation Drawer y Configuración de Usuario**
+
+#### **Objetivo**
+En esta semana, el objetivo es continuar con la implementación de la aplicación móvil Android que estamos desarrollando. Esta vez, nos enfocaremos en reemplazar las Activities por Fragments, implementar un `Navigation Drawer` para la navegación fluida entre secciones y permitir la configuración del usuario desde el perfil. A lo largo de la semana, implementaremos la funcionalidad para cambiar la contraseña y alternar entre el modo claro y oscuro desde el `ProfileFragment`. También se incluirá la opción de hacer `logout` desde el menú lateral.
+
+#### **Tareas**
+
+1. **Implementación de una `SplashScreen`**
+   
+3. **Migración de Activities a Fragments**  
+   - **DashboardActivity** → `DashboardFragment`
+   - **FavouritesActivity** → `FavouritesFragment`
+   - **DetailActivity** → `DetailFragment`
+   - **ProfileActivity** → `ProfileFragment`
+
+   Asegúrate de que cada `Fragment` cargue la interfaz correspondiente y mantenga la funcionalidad prevista (e.g., lista de elementos en el `DashboardFragment`, favoritos en el `FavouritesFragment`, etc.).
+
+4. **Implementación del Navigation Drawer**
+   - Crea un `DrawerLayout` y un `NavigationView` en `MainActivity` para gestionar la navegación entre los diferentes `Fragments`. Puedes usar la plantilla del propio `Android Studio` añadiendo una nueva activity de tipo `NavigationDrawer`.
+   - Enlaza cada item del menú con su correspondiente Fragment: `DashboardFragment`, `FavouritesFragment`, `ProfileFragment`, y la opción de hacer `logout`.
+   - Utiliza el patrón de `FragmentTransaction` para reemplazar los fragments dentro del `MainActivity`.
+
+5. **ProfileFragment: Cambio de Contraseña y Tema**
+   - Implementa un `ProfileFragment` que permita al usuario cambiar su contraseña y alternar entre el modo claro y oscuro.
+   - **Cambio de Contraseña**: Usa `FirebaseAuth` para cambiar la contraseña del usuario autenticado.
+   - **Modo Oscuro**: Implementa un `Switch` para alternar entre el modo claro y oscuro, y guarda la preferencia usando `SharedPreferences`.
+
+6. **Logout**
+   - Añade la opción de `logout` en el menú del `NavigationDrawer`.
+   - Al hacer logout, cierra la sesión de `FirebaseAuth` y redirige al usuario de vuelta a la pantalla de login.
+
+7. **Refactorización del código y uso de MVVM**
+   - Mantén la arquitectura MVVM para todas las pantallas que impliquen lógica de negocio (e.g., `DashboardViewModel`, `ProfileViewModel`).
+   - Implementa `LiveData` para que los cambios de datos en el ViewModel actualicen la interfaz de usuario automáticamente.
+
+8. **Navegación a DetailFragment desde RecyclerView**
+   - En `DashboardFragment`, cuando el usuario seleccione un ítem, navega a `DetailFragment` y pasa los datos correspondientes mediante un `Bundle`.
+
+#### **Entregables**
+
+1. **Código en GitHub**
+   - Subir el código a la rama `semana4`.
+   - Realizar commits atómicos con el prefijo “Semana4: [Descripción del cambio]”.
+   - Al finalizar la semana, mergear la rama `semana4` con `main`.
+
+2. **Vídeo Demostrativo**
+   - Graba un vídeo demostrativo mostrando las siguientes funcionalidades:
+     - La implementación de la `Splash Screen`.
+     - Navegación entre los Fragments usando el `Navigation Drawer` (Dashboard, Favoritos, Perfil, Detalle).
+     - Cambio de contraseña desde el `ProfileFragment`.
+     - Cambio de tema entre claro y oscuro desde el `ProfileFragment`.
+     - Logout y retorno a la pantalla de `LoginActivity`.
+
+3. **En Classroom**
+   - Subir el enlace al repositorio de GitHub.
+   - Subir un archivo ZIP con el proyecto Android Studio.
+   - Subir el vídeo demostrativo.
 
 
+
+      
