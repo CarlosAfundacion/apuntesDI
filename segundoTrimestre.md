@@ -1177,7 +1177,365 @@ Si necesitas realizar cambios en los colores o temas después de la integración
 - **Organización:** Mantén el código y recursos estructurados y limpios.
 
 
+# Semana 4: Implementación de Splash Screen y Migración a Fragments con Navigation Drawer
 
+---
+
+#### 1. **Splash Screen**
+
+Una Splash Screen es una pantalla de bienvenida que se muestra al iniciar una aplicación, normalmente con un logo, animación o mensaje de carga. Su propósito es mejorar la transición entre el arranque de la app y la pantalla principal.
+
+##### 1.1. **Crear un Tema para la Splash Screen**
+
+En `res/values/themes.xml`, agrega un nuevo tema para la Splash Screen:
+
+```xml
+<style name="Theme.SplashScreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <item name="android:windowBackground">@drawable/splash_background</item>
+</style>
+```
+
+En `res/drawable/splash_background.xml`, define el fondo:
+
+```xml
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/primary" />
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/logo" />
+    </item>
+</layer-list>
+```
+
+> **Nota**: Sustituye `@drawable/logo` con el logo de tu aplicación.
+
+##### 1.2. **Crear la Activity para la Splash Screen**
+
+Crea una nueva `SplashActivity`:
+
+```java
+public class SplashActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+    }
+}
+```
+
+Modifica `AndroidManifest.xml` para establecer `SplashActivity` como la pantalla de inicio:
+
+```xml
+<activity
+    android:name=".SplashActivity"
+    android:theme="@style/Theme.SplashScreen">
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+    </intent-filter>
+</activity>
+```
+
+##### 1.3. **Agregar un Retraso Opcional**
+
+Para que la Splash Screen dure unos segundos antes de abrir `MainActivity`, usa un `Handler`:
+
+```java
+new Handler(Looper.getMainLooper()).postDelayed(() -> {
+    startActivity(new Intent(SplashActivity.this, MainActivity.class));
+    finish();
+}, 2000); // 2000 milisegundos (2 segundos)
+```
+
+> **Recomendación**: No abuses del retraso; si la aplicación carga rápido, evita hacerlo innecesario.
+
+---
+
+#### 2. **Migración a Fragments, Navigation Drawer y Configuración de Usuario**
+
+##### 2.1. **Introducción**
+
+En las semanas anteriores, se crearon varias `Activities` como `DashboardActivity`, `FavouritesActivity`, y `DetailActivity`. Ahora se migrarán a `Fragments` para mejorar la arquitectura de la aplicación, reducir código duplicado y permitir una navegación más fluida con un `Navigation Drawer`.
+
+##### 2.2. **Migración de Activities a Fragments**
+
+Cada `Activity` será reemplazada por un `Fragment`. Los `Fragments` incluyen:
+
+- `DashboardFragment` en lugar de `DashboardActivity`
+- `FavouritesFragment` en lugar de `FavouritesActivity`
+- `DetailFragment` en lugar de `DetailActivity`
+- `ProfileFragment` para configuración de usuario (cambio de contraseña y modo claro/oscuro)
+
+###### 2.2.1. **Creación de Fragments**
+
+Ejemplo para `DashboardFragment`:
+
+```java
+public class DashboardFragment extends Fragment {
+    public DashboardFragment() { }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        // Configura RecyclerView, adaptadores, etc.
+        return view;
+    }
+}
+```
+
+#### 2.3. **Layouts para los Fragments**
+
+Cada `Fragment` tendrá su propio archivo de layout. Ejemplo para `fragment_dashboard.xml`:
+
+```xml
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/dashboardRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>
+```
+
+---
+
+#### 3. **Creación de MainActivity con Navigation Drawer**
+
+##### 3.1. **Estructura XML del Navigation Drawer**
+
+Edita el layout de `MainActivity` para incluir un `DrawerLayout` y un `NavigationView`:
+
+```xml
+<androidx.drawerlayout.widget.DrawerLayout
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+        
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/drawer_menu" />
+</androidx.drawerlayout.widget.DrawerLayout>
+```
+
+##### 3.2. **Menú del Drawer**
+
+Define las opciones en `res/menu/drawer_menu.xml`:
+
+```xml
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_dashboard" android:title="Dashboard" />
+    <item android:id="@+id/nav_favourites" android:title="Favoritos" />
+    <item android:id="@+id/nav_profile" android:title="Perfil" />
+    <item android:id="@+id/nav_logout" android:title="Cerrar Sesión" />
+</menu>
+```
+
+##### 3.3. **Lógica en MainActivity**
+
+En `MainActivity`, gestiona la selección de los ítems del menú:
+
+```java
+public class MainActivity extends AppCompatActivity {
+    private ActivityMainBinding binding;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        
+        binding.navigationView.setNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.nav_dashboard: openFragment(new DashboardFragment()); break;
+                case R.id.nav_favourites: openFragment(new FavouritesFragment()); break;
+                case R.id.nav_profile: openFragment(new ProfileFragment()); break;
+                case R.id.nav_logout: logoutUser(); break;
+            }
+            binding.drawerLayout.closeDrawers();
+            return true;
+        });
+
+        if (savedInstanceState == null) {
+            openFragment(new DashboardFragment());
+        }
+    }
+
+    private void openFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.fragmentContainer, fragment)
+            .commit();
+    }
+
+    private void logoutUser() {
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+}
+```
+
+---
+
+#### 4. **Implementación de la Pantalla de Perfil (ProfileFragment)**
+
+##### 4.1. **Layout de ProfileFragment**
+
+```xml
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText android:id="@+id/currentPasswordEditText" android:hint="Contraseña actual" android:inputType="textPassword"/>
+    <EditText android:id="@+id/newPasswordEditText" android:hint="Nueva contraseña" android:inputType="textPassword"/>
+    <Button android:id="@+id/changePasswordButton" android:text="Cambiar contraseña"/>
+    <Switch android:id="@+id/darkModeSwitch" android:text="Modo oscuro"/>
+</LinearLayout>
+```
+
+##### 4.2. **Lógica de cambio de contraseña y modo oscuro**
+
+```java
+public class ProfileFragment extends Fragment {
+    private EditText currentPasswordEditText, newPasswordEditText;
+    private Switch darkModeSwitch;
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        currentPasswordEditText = view.findViewById(R.id.currentPasswordEditText);
+        newPasswordEditText = view.findViewById(R.id.newPasswordEditText);
+        darkModeSwitch = view.findViewById(R.id.darkModeSwitch);
+
+        SharedPreferences prefs = requireActivity().getSharedPreferences("AppConfig", Context.MODE_PRIVATE);
+        darkModeSwitch.setChecked(prefs.getBoolean("darkMode", false));
+
+        darkModeSwitch.setOnCheckedChangeListener((compoundButton, checked) -> toggleDarkMode(checked));
+        view.findViewById(R.id.changePasswordButton).setOnClickListener(v -> changePassword());
+
+        return view;
+    }
+
+    private void changePassword() {
+        String currentPass = currentPasswordEditText.getText().toString();
+        String newPass = newPasswordEditText.getText().toString();
+        // Código para cambiar la contraseña con Firebase
+    }
+
+    private void toggleDarkMode(boolean enableDarkMode) {
+        SharedPreferences prefs = requireActivity().getSharedPreferences("AppConfig", Context.MODE_PRIVATE);
+        prefs.edit().putBoolean("darkMode", enableDarkMode).apply();
+        AppCompatDelegate.setDefaultNightMode(enableDarkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+        requireActivity().recreate();
+    }
+}
+```
+
+---
+
+#### 5. **Navegación al DetailFragment desde el RecyclerView (DashboardFragment)**
+
+##### 5.1. **Pasar datos al DetailFragment**
+
+```java
+public class DashboardFragment extends Fragment {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+
+        RecyclerView recyclerView = view.findViewById(R.id.dashboardRecyclerView);
+        MyAdapter adapter = new MyAdapter(item -> {
+            DetailFragment detailFragment = new DetailFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("ITEM_ID", item.getId());
+            detailFragment.setArguments(bundle);
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainer, detailFragment)
+                .addToBackStack(null)
+                .commit();
+        });
+
+        recyclerView.setAdapter(adapter);
+        return view;
+    }
+}
+```
+
+##### 5.2. **Recibir datos en DetailFragment**
+
+```java
+public class DetailFragment extends Fragment {
+    private String itemId;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_detail, container, false);
+
+        if (getArguments() != null) {
+            itemId = getArguments().getString("ITEM_ID");
+        }
+        // Cargar datos con itemId
+        return view;
+    }
+}
+```
+
+---
+
+#### 6. **Logout desde el Drawer**
+
+```java
+private void logoutUser() {
+    FirebaseAuth.getInstance().signOut();
+    Intent intent = new Intent(this, LoginActivity.class);
+    startActivity(intent);
+    finish();
+}
+```
+
+---
+
+#### 7. **Consolidación de MVVM**
+
+Mantén la arquitectura MVVM:
+
+- **ViewModels**: Manejan la lógica de cada `Fragment`.
+- **Repositorios**: Se comunican con Firebase.
+- **Models**: Representan los datos.
+- **Views (Fragments)**: Interactúan con los `ViewModels` usando `LiveData`.
+
+Ejemplo de `DashboardViewModel`:
+
+```java
+public class DashboardFragment extends Fragment {
+    private DashboardViewModel viewModel;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        viewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+        viewModel.getItemsLiveData().observe(getViewLifecycleOwner(), items -> {
+            // Actualizar RecyclerView
+        });
+        return view;
+    }
+}
+```
 
 
 
