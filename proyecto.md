@@ -905,7 +905,7 @@ En esta semana, el objetivo es continuar con la implementación de la aplicació
 2. **Vídeo Demostrativo**
    - Graba un vídeo demostrativo mostrando las siguientes funcionalidades:
      - La implementación de la `Splash Screen`.
-     - Navegación entre los Fragments usando el `Navigation Drawer` (Dashboard, Favoritos, Perfil, Detalle).
+     - Navegación entre los Fragments usando el `Navigation Drawer` (Dashboard, Favoritos, Perfil). Accede a `DetailFragment` desde el Dashboard
      - Cambio de contraseña desde el `ProfileFragment`.
      - Cambio de tema entre claro y oscuro desde el `ProfileFragment`.
      - Logout y retorno a la pantalla de `LoginActivity`.
